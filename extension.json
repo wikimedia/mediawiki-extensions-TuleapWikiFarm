@@ -1,0 +1,99 @@
+{
+	"name": "TuleapWikiFarm",
+	"version": "",
+	"license-name": "GPL-3.0-only",
+	"author": [
+		"[http://www.hallowelt.com Hallo Welt! GmbH]"
+	],
+	"url": "http://www.hallowelt.com",
+	"descriptionmsg": "tuleapwikifarm-desc",
+	"requires": {
+		"MediaWiki": ">= 1.35.0"
+	},
+	"MessagesDirs": {
+		"TuleapWikiFarm": "i18n"
+	},
+	"AutoloadNamespaces": {
+		"TuleapWikiFarm\\": "src/",
+		"TuleapWikiFarm\\Tests\\": "tests/phpunit"
+	},
+	"ServiceWiringFiles": [
+		"includes/ServiceWiring.php"
+	],
+	"Hooks": {
+		"LoadExtensionSchemaUpdates": "registerTable"
+	},
+	"HookHandlers": {
+		"registerTable": {
+			"class": "TuleapWikiFarm\\Hook\\RegisterTable"
+		}
+	},
+	"AvailableRights": [
+		"tuleap-farm-manage"
+	],
+	"GroupPermissions": {
+		"sysop": {
+			"tuleap-farm-manage": true
+		},
+		"user": {
+			"tuleap-farm-manage": false
+		}
+	},
+	"callback": "mwsInitComponents",
+	"RestRoutes": [
+		{
+			"method": "PUT",
+			"path": "/tuleap/instance/{name}",
+			"class": "TuleapWikiFarm\\Rest\\CreateInstanceHandler",
+			"services": [ "ProcessManager", "InstanceManager", "MainConfig" ]
+		},
+		{
+			"method": "POST",
+			"path": "/tuleap/instance/rename/{name}/{newname}",
+			"class": "TuleapWikiFarm\\Rest\\RenameInstanceHandler",
+			"services": [ "ProcessManager", "InstanceManager" ]
+		},
+		{
+			"method": "POST",
+			"path": "/tuleap/maintenance/{instance}/{script}",
+			"class": "TuleapWikiFarm\\Rest\\MaintenanceHandler",
+			"services": [ "ProcessManager", "InstanceManager" ]
+		},
+		{
+			"path": "/tuleap/process_status/{pid}",
+			"class": "TuleapWikiFarm\\Rest\\ProcessStatusHandler",
+			"services": [ "ProcessManager" ]
+		},
+		{
+			"path": "/tuleap/instance/{name}",
+			"class": "TuleapWikiFarm\\Rest\\InstanceStatusHandler",
+			"services": [ "InstanceManager" ]
+		},
+		{
+			"method": "DELETE",
+			"path": "/tuleap/instance/{name}",
+			"class": "TuleapWikiFarm\\Rest\\DeleteInstanceHandler",
+			"services": [ "ProcessManager", "InstanceManager", "MainConfig" ]
+		}
+	],
+	"config": {
+		"TuleapPreSharedKey": {
+			"value": null
+		}
+	},
+	"SessionProviders": {
+		"TuleapWikiFarm\\PreSharedKeySessionProvider": {
+			"class": "TuleapWikiFarm\\PreSharedKeySessionProvider",
+			"args": []
+		}
+	},
+	"GrantPermissions": {
+		"farm-management": {
+			"tuleap-farm-manage": true
+		}
+	},
+	"GrantPermissionGroups": {
+		"farm-management": "administration"
+	},
+	"manifest_version": 2
+}
