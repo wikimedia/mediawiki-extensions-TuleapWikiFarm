@@ -9,6 +9,13 @@ class InstanceStatusHandler extends InstanceHandler {
 	 */
 	public function execute() {
 		$this->assertRights();
+
+		$params = $this->getValidatedParams();
+		if ( $params['name'] === '_list' ) {
+			return $this->getResponseFactory()->createJson(
+				$this->getManager()->getStore()->getInstanceNames()
+			);
+		}
 		$instance = $this->getInstance();
 
 		return $this->getResponseFactory()->createJson( $instance->jsonSerialize() );

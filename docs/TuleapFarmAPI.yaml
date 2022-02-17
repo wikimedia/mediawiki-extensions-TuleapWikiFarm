@@ -13,6 +13,21 @@ tags:
     - name: process
       description: Process info
 paths:
+    /instance/_list:
+        get:
+            tags:
+                - instance
+            summary: Get list of available instances
+            operationId: listInstances
+            responses:
+                200:
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InstanceList'
+            security:
+                - farm-management-auth: []
     /instance/{name}:
         get:
             tags:
@@ -78,7 +93,7 @@ paths:
         delete:
             tags:
                 - instance
-            summary: Delete/suspend instance
+            summary: Delete instance
             operationId: deleteInstance
             parameters:
                 - name: name
@@ -125,6 +140,62 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ProcessResponse'
+                404:
+                    description: Instance not found
+                    content: {}
+                422:
+                    description: Invalid instance name
+                    content: {}
+            security:
+                - farm-management-auth: []
+    /instance/suspend/{name}:
+        post:
+            tags:
+                - instance
+            summary: Suspend instance
+            operationId: suspendInstance
+            parameters:
+                - name: name
+                  in: path
+                  description: Instance name
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                200:
+                    description: Instance suspended
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SuccessResponse'
+                404:
+                    description: Instance not found
+                    content: {}
+                422:
+                    description: Invalid instance name
+                    content: {}
+            security:
+                - farm-management-auth: []
+    /instance/resume/{name}:
+        post:
+            tags:
+                - instance
+            summary: Resume instance
+            operationId: resumeInstanace
+            parameters:
+                - name: name
+                  in: path
+                  description: Instance name
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                200:
+                    description: Instance resumed
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/SuccessResponse'
                 404:
                     description: Instance not found
                     content: {}
@@ -247,6 +318,17 @@ components:
                         - ready
                         - maintenance
                         - initializing
+        SuccessResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                    example: true
+        InstanceList:
+            type: array
+            items:
+                type: string
+                example: Instance A
         MaintenanceSample:
             type: object
             properties:
