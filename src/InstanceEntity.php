@@ -4,12 +4,13 @@ namespace TuleapWikiFarm;
 
 use DateTime;
 
-class InstanceEntity {
+class InstanceEntity implements \JsonSerializable {
 	public const STATE_INITIALIZING = 'initializing';
 	public const STATE_READY = 'ready';
 	public const STATE_MAINTENANCE = 'maintenance';
+	public const STATE_SUSPENDED = 'suspended';
 
-	private bool $dirty;
+	private bool $dirty = false;
 	/** @var int|null */
 	private $id;
 	/** @var string */
@@ -139,7 +140,8 @@ class InstanceEntity {
 	 */
 	public function setStatus( $status ) {
 		$allowedStatus = [
-			static::STATE_INITIALIZING, static::STATE_MAINTENANCE, static::STATE_READY
+			static::STATE_INITIALIZING, static::STATE_MAINTENANCE,
+			static::STATE_READY, static::STATE_SUSPENDED
 		];
 		if ( !in_array( $status, $allowedStatus ) ) {
 			return;
@@ -200,6 +202,18 @@ class InstanceEntity {
 			'ti_created_at' => $this->created->format( 'YmdHis' ),
 			'ti_status' => $this->status,
 			'ti_data' => json_encode( $this->data )
+		];
+	}
+
+	public function jsonSerialize() {
+		return [
+			'name' => $this->name,
+			'directory' => $this->directory,
+			'database' => $this->database,
+			'scriptPath' => $this->scriptPath,
+			'created' => $this->created->format( 'YmdHis' ),
+			'status' => $this->status,
+			'data' => $this->data
 		];
 	}
 }

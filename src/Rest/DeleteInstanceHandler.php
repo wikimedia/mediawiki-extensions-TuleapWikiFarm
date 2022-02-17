@@ -3,20 +3,16 @@
 namespace TuleapWikiFarm\Rest;
 
 use Config;
-use MediaWiki\Rest\HttpException;
 use MWStake\MediaWiki\Component\ProcessManager\ManagedProcess;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\DeleteVault;
 use TuleapWikiFarm\ProcessStep\DropDatabase;
 use TuleapWikiFarm\ProcessStep\UnregisterInstance;
-use Wikimedia\ParamValidator\ParamValidator;
 
-class DeleteInstanceHandler extends AuthorizedHandler {
+class DeleteInstanceHandler extends InstanceHandler {
 	/** @var ProcessManager */
 	private $processManager;
-	/** @var InstanceManager */
-	private $instanceManager;
 	/** @var Config */
 	private $config;
 
@@ -29,8 +25,8 @@ class DeleteInstanceHandler extends AuthorizedHandler {
 		ProcessManager $processManager, InstanceManager $instanceManager, Config $config
 	) {
 		$this->processManager = $processManager;
-		$this->instanceManager = $instanceManager;
 		$this->config = $config;
+		parent::__construct( $instanceManager );
 	}
 
 	/**
@@ -38,11 +34,7 @@ class DeleteInstanceHandler extends AuthorizedHandler {
 	 */
 	public function execute() {
 		$this->assertRights();
-		$params = $this->getValidatedParams();
-		$instance = $this->instanceManager->getStore()->getInstanceByName( $params['name'] );
-		if ( !$instance ) {
-			throw new HttpException( 'Instance not found', 404 );
-		}
+		$instance = $this->getInstance();
 
 		$dbConnection = [
 			'type' => $this->config->get( 'DBtype' ),
@@ -71,18 +63,5 @@ class DeleteInstanceHandler extends AuthorizedHandler {
 		return $this->getResponseFactory()->createJson( [
 			'pid' => $this->processManager->startProcess( $process )
 		] );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getParamSettings() {
-		return [
-			'name' => [
-				self::PARAM_SOURCE => 'path',
-				ParamValidator::PARAM_REQUIRED => true,
-				ParamValidator::PARAM_TYPE => 'string',
-			]
-		];
 	}
 }

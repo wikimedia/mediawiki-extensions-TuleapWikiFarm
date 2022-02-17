@@ -2,7 +2,6 @@
 
 namespace TuleapWikiFarm;
 
-use DateTime;
 use Exception;
 use Wikimedia\Rdbms\ILoadBalancer;
 
@@ -128,14 +127,6 @@ class InstanceStore {
 		}
 
 		return $return;
-	}
-
-	/**
-	 * @param string $name
-	 * @return InstanceEntity
-	 */
-	public function getNewInstance( $name ) {
-		return new InstanceEntity( $name, new DateTime() );
 	}
 
 	/**

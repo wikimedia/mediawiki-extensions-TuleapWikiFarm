@@ -155,26 +155,15 @@ class Dispatcher {
 	}
 
 	private function redirectIfNotReady() {
-		$redir = null;
-		switch ( $this->instance->getStatus() ) {
-			case InstanceEntity::STATE_INITIALIZING:
-				$redir = '/w/ti_init.html';
-				break;
-			case InstanceEntity::STATE_MAINTENANCE:
-				if ( !$this->isMaintenance() ) {
-					$redir = '/w/ti_maintenance.html';
-				}
-				break;
+		if ( $this->isMaintenance() ) {
+			return;
 		}
 
-		if ( $redir ) {
-			if ( $this->isMaintenance() ) {
-				echo "Instance is not ready\n";
-				die();
-			}
-			header( 'Location: ' . $redir );
-			die();
+		if ( $this->instance->getStatus() === InstanceEntity::STATE_READY ) {
+			return;
 		}
+		echo "Instance not available. Status: " . $this->instance->getStatus();
+		die();
 	}
 
 	private function redirectIfNoInstance() {

@@ -13,6 +13,32 @@
 	"MessagesDirs": {
 		"TuleapWikiFarm": "i18n"
 	},
+	"attributes": {
+		"TuleapWikiFarm": {
+			"MaintenanceScripts": {
+				"runjobs": {
+					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\RunJobs",
+					"services": [ "InstanceManager" ]
+				},
+				"update": {
+					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\Update",
+					"services": [ "InstanceManager" ]
+				},
+				"set-user-groups": {
+					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\SetGroups",
+					"services": [ "InstanceManager" ]
+				},
+				"refresh-links": {
+					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\RefreshLinks",
+					"services": [ "InstanceManager" ]
+				},
+				"terminate-sessions": {
+					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\TerminateSessions",
+					"services": [ "InstanceManager" ]
+				}
+			}
+		}
+	},
 	"AutoloadNamespaces": {
 		"TuleapWikiFarm\\": "src/",
 		"TuleapWikiFarm\\Tests\\": "tests/phpunit"
@@ -52,6 +78,20 @@
 			"path": "/tuleap/instance/rename/{name}/{newname}",
 			"class": "TuleapWikiFarm\\Rest\\RenameInstanceHandler",
 			"services": [ "ProcessManager", "InstanceManager" ]
+		},
+		{
+			"method": "POST",
+			"path": "/tuleap/instance/suspend/{name}",
+			"class": "TuleapWikiFarm\\Rest\\SetInstanceStatusHandler",
+			"args": [ "suspended", "ready" ],
+			"services": [ "InstanceManager" ]
+		},
+		{
+			"method": "POST",
+			"path": "/tuleap/instance/resume/{name}",
+			"class": "TuleapWikiFarm\\Rest\\SetInstanceStatusHandler",
+			"args": [ "ready", "suspended" ],
+			"services": [ "InstanceManager" ]
 		},
 		{
 			"method": "POST",

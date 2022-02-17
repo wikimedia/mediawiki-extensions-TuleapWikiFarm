@@ -2,6 +2,8 @@
 
 namespace TuleapWikiFarm;
 
+use DateTime;
+
 class InstanceManager {
 	/** @var InstanceStore */
 	private $store;
@@ -25,9 +27,8 @@ class InstanceManager {
 	 * @return bool
 	 */
 	public function checkInstanceNameValidity( $name ) {
-		// TODO: Implement
-		return true;
-	}
+		return !preg_match( '/\/|#|<|>/', $name );
+ 	}
 
 	/**
 	 * @param string $name
@@ -48,6 +49,14 @@ class InstanceManager {
 		$name = str_replace( '_', '-', $name );
 
 		return "/$name";
+	}
+
+	/**
+	 * @param string $name
+	 * @return InstanceEntity
+	 */
+	public function getNewInstance( $name ) {
+		return new InstanceEntity( $name, new DateTime() );
 	}
 
 	/**
@@ -79,6 +88,7 @@ class InstanceManager {
 	public function generateDbName() {
 		$prefix = "tuleap_";
 
+		// TODO: How to name databases?
 		return substr( uniqid( $prefix, true ), 0, 16 );
 	}
 
@@ -135,5 +145,16 @@ class InstanceManager {
 			throw new \Exception( preg_last_error_msg() );
 		}
 		return file_put_contents( $filePath, $content );
+	}
+
+	/**
+	 * @param InstanceEntity $instance
+	 * @param string $status
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function setInstanceStatus( InstanceEntity $instance, $status ) {
+		$instance->setStatus( $status );
+		return $this->store->storeEntity( $instance );
 	}
 }

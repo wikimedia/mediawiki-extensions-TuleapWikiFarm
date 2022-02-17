@@ -8,11 +8,6 @@ use MWStake\MediaWiki\Component\ProcessManager\ManagedProcess;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
-use TuleapWikiFarm\ProcessStep\Maintenance\RefreshLinks;
-use TuleapWikiFarm\ProcessStep\Maintenance\RunJobs;
-use TuleapWikiFarm\ProcessStep\Maintenance\SetGroups;
-use TuleapWikiFarm\ProcessStep\Maintenance\TerminateSessions;
-use TuleapWikiFarm\ProcessStep\Maintenance\Update;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class MaintenanceHandler extends AuthorizedHandler {
@@ -21,29 +16,7 @@ class MaintenanceHandler extends AuthorizedHandler {
 	/** @var InstanceManager */
 	protected $instanceManager;
 
-	// TODO: Registry?
-	private $scriptMap = [
-		'runjobs' => [
-			'class' => RunJobs::class,
-			'services' => [ "InstanceManager" ]
-		],
-		'update' => [
-			'class' => Update::class,
-			'services' => [ "InstanceManager" ]
-		],
-		'set-user-groups' => [
-			'class' => SetGroups::class,
-			'services' => [ "InstanceManager" ]
-		],
-		'refresh-links' => [
-			'class' => RefreshLinks::class,
-			'services' => [ "InstanceManager" ]
-		],
-		'terminate-sessions' => [
-			'class' => TerminateSessions::class,
-			'services' => [ "InstanceManager" ]
-		]
-	];
+	private $scriptMap = [];
 
 	/**
 	 * @param ProcessManager $processManager
@@ -54,6 +27,9 @@ class MaintenanceHandler extends AuthorizedHandler {
 	) {
 		$this->processManager = $processManager;
 		$this->instanceManager = $instanceManager;
+		$this->scriptMap = \ExtensionRegistry::getInstance()->getAttribute(
+			'TuleapWikiFarmMaintenanceScripts'
+		);
 	}
 
 	/**
