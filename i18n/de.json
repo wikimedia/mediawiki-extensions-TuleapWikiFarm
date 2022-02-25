@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Brettchenweber"
+		]
 	},
-	"tuleapwikifarm-desc": "Wikifarm-verwaltung über Tuleap"
+	"tuleapwikifarm-desc": "Wikifarm-Verwaltung über Tuleap"
 }
