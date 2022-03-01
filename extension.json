@@ -119,6 +119,11 @@
 	"config": {
 		"TuleapPreSharedKey": {
 			"value": null
+		},
+		"TuleapFarmConfig": {
+			"value": {
+				"instanceDir": null
+			}
 		}
 	},
 	"SessionProviders": {

@@ -7,12 +7,15 @@ use DateTime;
 class InstanceManager {
 	/** @var InstanceStore */
 	private $store;
+	/** @var \Config */
+	private $farmConfig;
 
 	/**
 	 * @param InstanceStore $store
 	 */
-	public function __construct( InstanceStore $store ) {
+	public function __construct( InstanceStore $store, \Config $farmConfig ) {
 		$this->store = $store;
+		$this->farmConfig = $farmConfig;
 	}
 
 	/**
@@ -122,7 +125,7 @@ class InstanceManager {
 	 * @return string
 	 */
 	public function getInstanceDirBase() {
-		return $GLOBALS['IP'] . '/_instances';
+		return $this->farmConfig->get( 'instanceDir' );
 	}
 
 	/**

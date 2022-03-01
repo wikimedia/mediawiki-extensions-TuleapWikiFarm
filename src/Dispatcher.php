@@ -3,6 +3,7 @@
 namespace TuleapWikiFarm;
 
 use Maintenance;
+use function Psy\info;
 
 class Dispatcher {
 
@@ -159,6 +160,10 @@ class Dispatcher {
 			return;
 		}
 
+		if ( $this->instance->getStatus() === InstanceEntity::STATE_SUSPENDED ) {
+			$this->doInclude( $this->globals['IP'] . '/LocalSettings.SUSPENDED.php' );
+			return;
+		}
 		if ( $this->instance->getStatus() === InstanceEntity::STATE_READY ) {
 			return;
 		}
