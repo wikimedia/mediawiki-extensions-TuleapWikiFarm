@@ -51,7 +51,7 @@ class InstanceManager {
 		$name = str_replace( ' ', '-', $name );
 		$name = str_replace( '_', '-', $name );
 
-		return "/$name";
+		return "/mediawiki/$name";
 	}
 
 	/**
