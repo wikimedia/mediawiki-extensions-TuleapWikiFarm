@@ -144,8 +144,8 @@ class Dispatcher {
 	}
 
 	private function setupEnvironment() {
-		// TODO: Hardcoded path
-		$this->globals['wgUploadPath'] = '/w/_instances/' . $this->instance->getScriptPath() . '/images';
+		$this->globals['wgArticlePath'] = "{$this->instance->getScriptPath()}/wiki/$1";
+		$this->globals['wgUploadPath'] = "{$this->instance->getScriptPath()}/img_auth.php";
 		$this->globals['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
 		$this->globals['wgReadOnlyFile'] = "{$this->globals['wgUploadDirectory']}/lock_yBgMBwiR";
 		$this->globals['wgFileCacheDirectory'] = "{$this->globals['wgUploadDirectory']}/cache";
