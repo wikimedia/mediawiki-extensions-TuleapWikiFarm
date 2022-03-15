@@ -19,8 +19,8 @@ class InstallInstance implements IProcessStep {
 	private $dbPass;
 	/** @var string */
 	private $dbPrefix;
-	/** @var string */
-	private $dbName;
+	/** @var int */
+	private $projectId;
 	/** @var string */
 	private $lang;
 	/** @var string */
@@ -29,6 +29,8 @@ class InstallInstance implements IProcessStep {
 	private $adminUser;
 	/** @var string */
 	private $adminPass;
+	/** @var array */
+	private $extra;
 
 	/**
 	 * @param InstanceManager $manager
@@ -39,7 +41,7 @@ class InstallInstance implements IProcessStep {
 	public static function factory( InstanceManager $manager, $args ) {
 		$required = [
 			'dbserver', 'dbuser', 'dbpass', 'dbprefix',
-			'lang', 'server', 'adminuser', 'adminpass'
+			'lang', 'server', 'adminuser', 'adminpass', 'project_id'
 		];
 		foreach ( $required as $key ) {
 			if ( !isset( $args[$key] ) ) {
@@ -48,8 +50,9 @@ class InstallInstance implements IProcessStep {
 		}
 
 		return new static(
-			$manager, $args['dbserver'], $args['dbuser'], $args['dbpass'], $args['dbname'] ?? null,
-			$args['dbprefix'], $args['lang'], $args['server'], $args['adminuser'], $args['adminpass']
+			$manager, $args['dbserver'], $args['dbuser'], $args['dbpass'], $args['project_id'],
+			$args['dbprefix'], $args['lang'], $args['server'], $args['adminuser'],
+			$args['adminpass'], $args['extra'] ?? []
 		);
 	}
 
@@ -58,27 +61,29 @@ class InstallInstance implements IProcessStep {
 	 * @param string $dbserver
 	 * @param string $dbuser
 	 * @param string $dbpass
-	 * @param string $dbname
+	 * @param int $projectId
 	 * @param string $dbprefix
 	 * @param string $lang
 	 * @param string $server
 	 * @param string $adminuser
 	 * @param string $adminpass
+	 * @param array $extra
 	 */
 	public function __construct(
-		InstanceManager $manager, $dbserver, $dbuser, $dbpass, $dbname,
-		$dbprefix, $lang, $server, $adminuser, $adminpass
+		InstanceManager $manager, $dbserver, $dbuser, $dbpass, $projectId,
+		$dbprefix, $lang, $server, $adminuser, $adminpass, $extra = []
 	) {
 		$this->manager = $manager;
 		$this->dbServer = $dbserver;
 		$this->dbUser = $dbuser;
 		$this->dbPass = $dbpass;
+		$this->projectId = $projectId;
 		$this->dbPrefix = $dbprefix;
-		$this->dbName = $dbname;
 		$this->lang = $lang;
 		$this->server = $server;
 		$this->adminUser = $adminuser;
 		$this->adminPass = $adminpass;
+		$this->extra = $extra;
 	}
 
 	/**
@@ -93,9 +98,9 @@ class InstallInstance implements IProcessStep {
 		}
 
 		$scriptPath = $this->manager->generateScriptPath( $instance );
-		if ( !$this->dbName ) {
-			$this->dbName = $this->manager->generateDbName();
-		}
+		$dbName = $this->manager->generateDbName( $this->projectId );
+		// This cannot be changed
+		$this->extra['projectId'] = $this->projectId;
 
 		$phpBinaryFinder = new ExecutableFinder();
 		$phpBinaryPath = $phpBinaryFinder->find( 'php' );
@@ -104,7 +109,7 @@ class InstallInstance implements IProcessStep {
 			$phpBinaryPath,
 			$GLOBALS['IP'] . '/extensions/TuleapWikiFarm/maintenance/installInstance.php',
 			'--scriptpath', $scriptPath,
-			'--dbname', $this->dbName,
+			'--dbname', $dbName,
 			'--dbuser', $this->dbUser,
 			'--dbpass', $this->dbPass,
 			'--dbserver', $this->dbServer,
@@ -127,7 +132,8 @@ class InstallInstance implements IProcessStep {
 			throw new Exception( $err );
 		}
 
-		$instance->setDatabaseName( $this->dbName );
+		$instance->setDatabaseName( $dbName );
+		$instance->setData( $this->extra );
 		$instance->setScriptPath( $scriptPath );
 		$this->manager->getStore()->storeEntity( $instance );
 

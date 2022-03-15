@@ -15,5 +15,10 @@ class RegisterTable implements LoadExtensionSchemaUpdatesHook {
 			'tuleap_instance',
 			dirname( dirname( __DIR__ ) ) . '/db/tuleap_instances.sql'
 		);
+
+		$updater->addExtensionTable(
+			'tuleap_global_storage_auth',
+			dirname( dirname( __DIR__ ) ) . '/db/tuleap_global_storage_auth.sql'
+		);
 	}
 }

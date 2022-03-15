@@ -16,9 +16,9 @@ $GLOBALS['wgGroupPermissions'] = [
 ];
 
 // ... and display a banner
-$GLOBALS['wgHooks']['BeforePageDisplay'][] = function( OutputPage $out, Skin $skin ) {
+$GLOBALS['wgHooks']['BeforePageDisplay'][] = function ( OutputPage $out, Skin $skin ) {
 	$out->addHTML(
-		Html::rawElement('div', [
+		Html::rawElement( 'div', [
 			'style' =>
 				'width: 20%; height: 40px; background-color: #d73939; ' .
 				'position: fixed; top: 0; left: 40%; text-align: center;' .

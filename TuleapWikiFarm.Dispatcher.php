@@ -16,8 +16,9 @@ $manager = new InstanceManager(
 		$GLOBALS['wgTuleapFarmConfig']
 	)
 );
+$globalStorage = new \TuleapWikiFarm\GlobalStorage( $dbLB );
 
-$dispatcher = new Dispatcher( $_SERVER, $_REQUEST, $GLOBALS, $manager );
+$dispatcher = new Dispatcher( $_SERVER, $_REQUEST, $GLOBALS, $manager, $globalStorage );
 
 foreach ( $dispatcher->getFilesToRequire() as $pathname ) {
 	require $pathname;

@@ -25,7 +25,7 @@ class InstanceManagerTest extends TestCase {
 	 * @dataProvider provideInstanceNames
 	 */
 	public function testInstanceNameValidity( $name, $shouldBeValid ) {
-		$this->assertSame( $shouldBeValid, $this->manager->checkInstanceNameValidity( $name ) ) ;
+		$this->assertSame( $shouldBeValid, $this->manager->checkInstanceNameValidity( $name ) );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class InstanceManagerTest extends TestCase {
 	public function testGenerateScriptPath() {
 		$instanceMock = $this->createMock( InstanceEntity::class );
 		$instanceMock->method( 'getName' )->willReturn( 'Foo_bar' );
-		$this->assertSame( '/Foo-bar', $this->manager->generateScriptPath( $instanceMock ) ) ;
+		$this->assertSame( '/Foo-bar', $this->manager->generateScriptPath( $instanceMock ) );
 	}
 
 	/**
@@ -43,8 +43,8 @@ class InstanceManagerTest extends TestCase {
 	public function testGetNewInstance() {
 		$instance = $this->manager->getNewInstance( 'Foo' );
 		$this->assertInstanceOf( InstanceEntity::class, $instance );
-		$this->assertSame( 'Foo', $instance->getName() ) ;
-		$this->assertNull( $instance->getId() ) ;
+		$this->assertSame( 'Foo', $instance->getName() );
+		$this->assertNull( $instance->getId() );
 	}
 
 	/**
@@ -58,10 +58,9 @@ class InstanceManagerTest extends TestCase {
 
 		$renamed = $this->manager->getRenamedInstanceEntity( $instanceMock, 'Bar' );
 		$this->assertInstanceOf( InstanceEntity::class, $renamed );
-		$this->assertSame( 'Bar', $renamed->getName() ) ;
-		$this->assertSame( 3, $renamed->getId() ) ;
+		$this->assertSame( 'Bar', $renamed->getName() );
+		$this->assertSame( 3, $renamed->getId() );
 	}
-
 
 	/**
 	 * @return array[]

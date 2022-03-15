@@ -182,6 +182,13 @@ class InstanceEntity implements \JsonSerializable {
 	}
 
 	/**
+	 * @param array $data
+	 */
+	public function setData( $data ) {
+		$this->data = $data;
+	}
+
+	/**
 	 * @param string $key
 	 * @param mixed $value
 	 */

@@ -15,7 +15,7 @@ class InstanceEntityTest extends TestCase {
 		parent::setUp();
 		$this->instance = new InstanceEntity(
 			'Dummy', new \DateTime(), null, '/dummy',
-			'tuleap_dummy' ,'/dummy', InstanceEntity::STATE_INITIALIZING
+			'tuleap_dummy', '/dummy', InstanceEntity::STATE_INITIALIZING
 		);
 	}
 

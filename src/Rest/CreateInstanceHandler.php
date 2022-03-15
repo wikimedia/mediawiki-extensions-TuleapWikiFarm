@@ -102,12 +102,6 @@ class CreateInstanceHandler extends AuthorizedHandler {
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBuser' ),
 				],
-				'dbname' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => false,
-					ParamValidator::PARAM_TYPE => 'string',
-					ParamValidator::PARAM_DEFAULT => '',
-				],
 				'dbpass' => [
 					self::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_REQUIRED => false,
@@ -124,7 +118,12 @@ class CreateInstanceHandler extends AuthorizedHandler {
 					self::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_REQUIRED => true,
 					ParamValidator::PARAM_TYPE => 'string',
-				]
+				],
+				'project_id' => [
+					self::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_REQUIRED => true,
+					ParamValidator::PARAM_TYPE => 'integer',
+				],
 			] );
 		}
 		return parent::getBodyValidator( $contentType );

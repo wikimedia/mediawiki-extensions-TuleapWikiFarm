@@ -2,18 +2,20 @@
 
 namespace TuleapWikiFarm;
 
+use Config;
 use DateTime;
 
 class InstanceManager {
 	/** @var InstanceStore */
 	private $store;
-	/** @var \Config */
+	/** @var Config */
 	private $farmConfig;
 
 	/**
 	 * @param InstanceStore $store
+	 * @param Config $farmConfig
 	 */
-	public function __construct( InstanceStore $store, \Config $farmConfig ) {
+	public function __construct( InstanceStore $store, Config $farmConfig ) {
 		$this->store = $store;
 		$this->farmConfig = $farmConfig;
 	}
@@ -31,7 +33,7 @@ class InstanceManager {
 	 */
 	public function checkInstanceNameValidity( $name ) {
 		return !preg_match( '/\/|#|<|>/', $name );
- 	}
+	}
 
 	/**
 	 * @param string $name
@@ -86,13 +88,11 @@ class InstanceManager {
 	}
 
 	/**
+	 * @param int $projectId
 	 * @return false|string
 	 */
-	public function generateDbName() {
-		$prefix = "tuleap_";
-
-		// TODO: How to name databases?
-		return substr( uniqid( $prefix, true ), 0, 16 );
+	public function generateDbName( $projectId ) {
+		return "mediawiki_$projectId";
 	}
 
 	/**
@@ -125,6 +125,7 @@ class InstanceManager {
 	 * @return string
 	 */
 	public function getInstanceDirBase() {
+		// Note: Eventhough this is configurable, after initial setup, it cannot be changed!
 		return $this->farmConfig->get( 'instanceDir' );
 	}
 

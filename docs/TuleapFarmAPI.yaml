@@ -287,6 +287,7 @@ components:
         CreateConfiguration:
             required:
                 - adminpass
+                - project_id
             type: object
             properties:
                 dbserver:
@@ -295,14 +296,19 @@ components:
                     type: string
                 dbpass:
                     type: string
-                dbname:
-                    type: string
                 adminuser:
                     type: string
+                project_id:
+                    type: integer
                 adminpass:
                     type: string
                 lang:
                     type: string
+                extra:
+                    type: array
+                    items:
+                        type: string
+                        example: any arbitrary data to be available on instance calls
         ProcessResponse:
             type: object
             properties:
