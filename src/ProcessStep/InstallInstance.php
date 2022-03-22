@@ -104,6 +104,9 @@ class InstallInstance implements IProcessStep {
 
 		$phpBinaryFinder = new ExecutableFinder();
 		$phpBinaryPath = $phpBinaryFinder->find( 'php' );
+		if ( !$phpBinaryPath ) {
+			throw new Exception( 'PHP executable not found' );
+		}
 		// We must run this in isolation, as to not override globals, services...
 		$process = new Process( [
 			$phpBinaryPath,
