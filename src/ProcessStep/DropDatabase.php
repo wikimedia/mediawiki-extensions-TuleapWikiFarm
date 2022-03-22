@@ -3,8 +3,8 @@
 namespace TuleapWikiFarm\ProcessStep;
 
 use Exception;
-use MWStake\MediaWiki\Component\ProcessManager\IProcessStep;
 use TuleapWikiFarm\InstanceManager;
+use TuleapWikiFarm\IProcessStep;
 
 class DropDatabase implements IProcessStep {
 	/** @var InstanceManager */

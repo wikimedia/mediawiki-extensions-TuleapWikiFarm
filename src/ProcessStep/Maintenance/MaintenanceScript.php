@@ -3,11 +3,11 @@
 namespace TuleapWikiFarm\ProcessStep\Maintenance;
 
 use Exception;
-use MWStake\MediaWiki\Component\ProcessManager\IProcessStep;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
+use TuleapWikiFarm\IProcessStep;
 
 abstract class MaintenanceScript implements IProcessStep {
 	/** @var InstanceManager */
@@ -80,7 +80,11 @@ abstract class MaintenanceScript implements IProcessStep {
 	 */
 	private function getPhpExecutable() {
 		$phpBinaryFinder = new ExecutableFinder();
-		return $phpBinaryFinder->find( 'php' );
+		$phpExec = $phpBinaryFinder->find( 'php' );
+		if ( !$phpExec ) {
+			throw new Exception( 'PHP executable not found' );
+		}
+		return $phpExec;
 	}
 
 	/**

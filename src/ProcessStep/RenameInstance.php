@@ -3,9 +3,9 @@
 namespace TuleapWikiFarm\ProcessStep;
 
 use Exception;
-use MWStake\MediaWiki\Component\ProcessManager\IProcessStep;
 use Symfony\Component\Filesystem\Filesystem;
 use TuleapWikiFarm\InstanceManager;
+use TuleapWikiFarm\IProcessStep;
 
 class RenameInstance implements IProcessStep {
 	/** @var InstanceManager */

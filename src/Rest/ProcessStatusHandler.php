@@ -7,6 +7,9 @@ use MWStake\MediaWiki\Component\ProcessManager\ProcessInfo;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use Wikimedia\ParamValidator\ParamValidator;
 
+/**
+ * NOT USED
+ */
 class ProcessStatusHandler extends AuthorizedHandler {
 	/** @var ProcessManager */
 	private $manager;

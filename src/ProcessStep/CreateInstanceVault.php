@@ -3,10 +3,10 @@
 namespace TuleapWikiFarm\ProcessStep;
 
 use Exception;
-use MWStake\MediaWiki\Component\ProcessManager\IProcessStep;
 use Symfony\Component\Filesystem\Filesystem;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
+use TuleapWikiFarm\IProcessStep;
 
 class CreateInstanceVault implements IProcessStep {
 	/** @var string */

@@ -5,7 +5,6 @@ namespace TuleapWikiFarm\Rest;
 use Config;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MWStake\MediaWiki\Component\ProcessManager\ManagedProcess;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
@@ -13,6 +12,7 @@ use TuleapWikiFarm\ProcessStep\CreateInstanceVault;
 use TuleapWikiFarm\ProcessStep\InstallInstance;
 use TuleapWikiFarm\ProcessStep\RegisterInstance;
 use TuleapWikiFarm\ProcessStep\SetInstanceStatus;
+use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class CreateInstanceHandler extends AuthorizedHandler {
@@ -50,7 +50,7 @@ class CreateInstanceHandler extends AuthorizedHandler {
 		$body['dbprefix'] = $this->config->get( 'DBprefix' );
 		$body['server'] = $this->config->get( 'Server' );
 
-		$process = new ManagedProcess( [
+		$process = new StepProcess( [
 			'register-instance' => [
 				'class' => RegisterInstance::class,
 				'args' => [ $params['name'] ],
@@ -73,9 +73,20 @@ class CreateInstanceHandler extends AuthorizedHandler {
 			]
 		] );
 
-		return $this->getResponseFactory()->createJson( [
-			'pid' => $this->processManager->startProcess( $process )
-		] );
+		$response = [];
+		try {
+			$data = $process->process();
+			$response['status'] = 'success';
+			$response['output'] = $data;
+		} catch ( \Exception $ex ) {
+			$response['status'] = 'error';
+			$response['error'] = [
+				'code' => $ex->getCode(),
+				'message' => $ex->getMessage(),
+				'trace' => $ex->getTraceAsString(),
+			];
+		}
+		return $this->getResponseFactory()->createJson( $response );
 	}
 
 	/**

@@ -10,8 +10,6 @@ tags:
       description: Instance management
     - name: maintenance
       description: Maintanence functions
-    - name: process
-      description: Process info
 paths:
     /instance/_list:
         get:
@@ -254,34 +252,6 @@ paths:
             x-codegen-request-body-name: body
             security:
                 - farm-management-auth: []
-    /process_status/{pid}:
-        post:
-            tags:
-                - process
-            summary: Get status of a process
-            operationId: processStatus
-            parameters:
-                - name: pid
-                  in: path
-                  description: Process id
-                  required: true
-                  schema:
-                      type: string
-            responses:
-                200:
-                    description: successful operation
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/ProcessStatus'
-                400:
-                    description: Invalid PID
-                    content: {}
-                422:
-                    description: Not found
-                    content: {}
-            security:
-                - farm-management-auth: []
 components:
     schemas:
         CreateConfiguration:
@@ -312,9 +282,12 @@ components:
         ProcessResponse:
             type: object
             properties:
-                pid:
+                status:
                     type: string
-                    example: "1902802839923487"
+                    example: "finished"
+                output:
+                    type: string
+                    example: "some output data"
         InstanceStatus:
             type: object
             properties:

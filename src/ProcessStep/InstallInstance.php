@@ -3,10 +3,10 @@
 namespace TuleapWikiFarm\ProcessStep;
 
 use Exception;
-use MWStake\MediaWiki\Component\ProcessManager\IProcessStep;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use TuleapWikiFarm\InstanceManager;
+use TuleapWikiFarm\IProcessStep;
 
 class InstallInstance implements IProcessStep {
 	/** @var InstanceManager */

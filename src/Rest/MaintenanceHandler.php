@@ -4,10 +4,10 @@ namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MWStake\MediaWiki\Component\ProcessManager\ManagedProcess;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
+use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class MaintenanceHandler extends AuthorizedHandler {
@@ -16,7 +16,7 @@ class MaintenanceHandler extends AuthorizedHandler {
 	/** @var InstanceManager */
 	protected $instanceManager;
 
-	private $scriptMap = [];
+	private $scriptMap;
 
 	/**
 	 * @param ProcessManager $processManager
@@ -69,13 +69,24 @@ class MaintenanceHandler extends AuthorizedHandler {
 		$body = $this->getValidatedBody();
 		$spec['args'][] = $body;
 
-		$process = new ManagedProcess( [
+		$process = new StepProcess( [
 			$script => $spec,
-		], $timeout );
-
-		return $this->getResponseFactory()->createJson( [
-			'pid' => $this->processManager->startProcess( $process )
 		] );
+
+		$response = [];
+		try {
+			$data = $process->process( $timeout );
+			$response['status'] = 'success';
+			$response['output'] = $data;
+		} catch ( \Exception $ex ) {
+			$response['status'] = 'error';
+			$response['error'] = [
+				'code' => $ex->getCode(),
+				'message' => $ex->getMessage(),
+				'trace' => $ex->getTraceAsString(),
+			];
+		}
+		return $this->getResponseFactory()->createJson( $response );
 	}
 
 	/**

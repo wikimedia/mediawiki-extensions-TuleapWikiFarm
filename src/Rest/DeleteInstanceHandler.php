@@ -3,12 +3,12 @@
 namespace TuleapWikiFarm\Rest;
 
 use Config;
-use MWStake\MediaWiki\Component\ProcessManager\ManagedProcess;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\DeleteVault;
 use TuleapWikiFarm\ProcessStep\DropDatabase;
 use TuleapWikiFarm\ProcessStep\UnregisterInstance;
+use TuleapWikiFarm\StepProcess;
 
 class DeleteInstanceHandler extends InstanceHandler {
 	/** @var ProcessManager */
@@ -42,7 +42,7 @@ class DeleteInstanceHandler extends InstanceHandler {
 			'user' => $this->config->get( 'DBuser' ),
 			'password' => $this->config->get( 'DBpassword' ),
 		];
-		$process = new ManagedProcess( [
+		$process = new StepProcess( [
 			'delete-vault' => [
 				'class' => DeleteVault::class,
 				'args' => [ $instance->getId() ],
@@ -60,8 +60,19 @@ class DeleteInstanceHandler extends InstanceHandler {
 			]
 		] );
 
-		return $this->getResponseFactory()->createJson( [
-			'pid' => $this->processManager->startProcess( $process )
-		] );
+		$response = [];
+		try {
+			$data = $process->process();
+			$response['status'] = 'success';
+			$response['output'] = $data;
+		} catch ( \Exception $ex ) {
+			$response['status'] = 'error';
+			$response['error'] = [
+				'code' => $ex->getCode(),
+				'message' => $ex->getMessage(),
+				'trace' => $ex->getTraceAsString(),
+			];
+		}
+		return $this->getResponseFactory()->createJson( $response );
 	}
 }

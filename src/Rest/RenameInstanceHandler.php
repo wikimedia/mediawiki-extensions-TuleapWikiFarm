@@ -3,12 +3,12 @@
 namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Rest\HttpException;
-use MWStake\MediaWiki\Component\ProcessManager\ManagedProcess;
 use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\Maintenance\RefreshLinks;
 use TuleapWikiFarm\ProcessStep\Maintenance\Update;
 use TuleapWikiFarm\ProcessStep\RenameInstance;
+use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class RenameInstanceHandler extends AuthorizedHandler {
@@ -47,7 +47,7 @@ class RenameInstanceHandler extends AuthorizedHandler {
 			throw new HttpException( 'Target instance name invalid, or already exists', 422 );
 		}
 
-		$process = new ManagedProcess( [
+		$process = new StepProcess( [
 			'rename-instance' => [
 				'class' => RenameInstance::class,
 				'args' => [ $source, $target ],
@@ -65,9 +65,20 @@ class RenameInstanceHandler extends AuthorizedHandler {
 			]
 		] );
 
-		return $this->getResponseFactory()->createJson( [
-			'pid' => $this->processManager->startProcess( $process )
-		] );
+		$response = [];
+		try {
+			$data = $process->process();
+			$response['status'] = 'success';
+			$response['output'] = $data;
+		} catch ( \Exception $ex ) {
+			$response['status'] = 'error';
+			$response['error'] = [
+				'code' => $ex->getCode(),
+				'message' => $ex->getMessage(),
+				'trace' => $ex->getTraceAsString(),
+			];
+		}
+		return $this->getResponseFactory()->createJson( $response );
 	}
 
 	/**
