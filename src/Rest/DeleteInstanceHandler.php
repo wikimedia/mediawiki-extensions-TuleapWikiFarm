@@ -3,7 +3,6 @@
 namespace TuleapWikiFarm\Rest;
 
 use Config;
-use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\DeleteVault;
 use TuleapWikiFarm\ProcessStep\DropDatabase;
@@ -11,20 +10,16 @@ use TuleapWikiFarm\ProcessStep\UnregisterInstance;
 use TuleapWikiFarm\StepProcess;
 
 class DeleteInstanceHandler extends InstanceHandler {
-	/** @var ProcessManager */
-	private $processManager;
 	/** @var Config */
 	private $config;
 
 	/**
-	 * @param ProcessManager $processManager
 	 * @param InstanceManager $instanceManager
 	 * @param Config $config
 	 */
 	public function __construct(
-		ProcessManager $processManager, InstanceManager $instanceManager, Config $config
+		InstanceManager $instanceManager, Config $config
 	) {
-		$this->processManager = $processManager;
 		$this->config = $config;
 		parent::__construct( $instanceManager );
 	}

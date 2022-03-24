@@ -5,7 +5,6 @@ namespace TuleapWikiFarm\Rest;
 use Config;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\CreateInstanceVault;
@@ -16,22 +15,18 @@ use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class CreateInstanceHandler extends AuthorizedHandler {
-	/** @var ProcessManager */
-	private $processManager;
 	/** @var InstanceManager */
 	private $instanceManager;
 	/** @var Config */
 	private $config;
 
 	/**
-	 * @param ProcessManager $processManager
 	 * @param InstanceManager $instanceManager
 	 * @param Config $config
 	 */
 	public function __construct(
-		ProcessManager $processManager, InstanceManager $instanceManager, Config $config
+		InstanceManager $instanceManager, Config $config
 	) {
-		$this->processManager = $processManager;
 		$this->instanceManager = $instanceManager;
 		$this->config = $config;
 	}

@@ -71,13 +71,13 @@
 			"method": "PUT",
 			"path": "/tuleap/instance/{name}",
 			"class": "TuleapWikiFarm\\Rest\\CreateInstanceHandler",
-			"services": [ "ProcessManager", "InstanceManager", "MainConfig" ]
+			"services": [ "InstanceManager", "MainConfig" ]
 		},
 		{
 			"method": "POST",
 			"path": "/tuleap/instance/rename/{name}/{newname}",
 			"class": "TuleapWikiFarm\\Rest\\RenameInstanceHandler",
-			"services": [ "ProcessManager", "InstanceManager" ]
+			"services": [ "InstanceManager" ]
 		},
 		{
 			"method": "POST",
@@ -97,12 +97,7 @@
 			"method": "POST",
 			"path": "/tuleap/maintenance/{instance}/{script}",
 			"class": "TuleapWikiFarm\\Rest\\MaintenanceHandler",
-			"services": [ "ProcessManager", "InstanceManager" ]
-		},
-		{
-			"path": "/tuleap/process_status/{pid}",
-			"class": "TuleapWikiFarm\\Rest\\ProcessStatusHandler",
-			"services": [ "ProcessManager" ]
+			"services": [ "InstanceManager" ]
 		},
 		{
 			"path": "/tuleap/instance/{name}",
@@ -113,7 +108,7 @@
 			"method": "DELETE",
 			"path": "/tuleap/instance/{name}",
 			"class": "TuleapWikiFarm\\Rest\\DeleteInstanceHandler",
-			"services": [ "ProcessManager", "InstanceManager", "MainConfig" ]
+			"services": [ "InstanceManager", "MainConfig" ]
 		}
 	],
 	"config": {

@@ -3,7 +3,6 @@
 namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Rest\HttpException;
-use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\Maintenance\RefreshLinks;
 use TuleapWikiFarm\ProcessStep\Maintenance\Update;
@@ -12,19 +11,15 @@ use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class RenameInstanceHandler extends AuthorizedHandler {
-	/** @var ProcessManager */
-	private $processManager;
 	/** @var InstanceManager */
 	private $instanceManager;
 
 	/**
-	 * @param ProcessManager $processManager
 	 * @param InstanceManager $instanceManager
 	 */
 	public function __construct(
-		ProcessManager $processManager, InstanceManager $instanceManager
+		InstanceManager $instanceManager
 	) {
-		$this->processManager = $processManager;
 		$this->instanceManager = $instanceManager;
 	}
 

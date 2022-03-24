@@ -4,28 +4,23 @@ namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
-use MWStake\MediaWiki\Component\ProcessManager\ProcessManager;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class MaintenanceHandler extends AuthorizedHandler {
-	/** @var ProcessManager */
-	private $processManager;
 	/** @var InstanceManager */
 	protected $instanceManager;
 
 	private $scriptMap;
 
 	/**
-	 * @param ProcessManager $processManager
 	 * @param InstanceManager $instanceManager
 	 */
 	public function __construct(
-		ProcessManager $processManager, InstanceManager $instanceManager
+		InstanceManager $instanceManager
 	) {
-		$this->processManager = $processManager;
 		$this->instanceManager = $instanceManager;
 		$this->scriptMap = \ExtensionRegistry::getInstance()->getAttribute(
 			'TuleapWikiFarmMaintenanceScripts'
