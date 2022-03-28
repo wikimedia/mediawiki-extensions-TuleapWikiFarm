@@ -18,23 +18,23 @@
 			"MaintenanceScripts": {
 				"runjobs": {
 					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\RunJobs",
-					"services": [ "InstanceManager" ]
+					"services": [ "InstanceManager", "MainConfig" ]
 				},
 				"update": {
 					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\Update",
-					"services": [ "InstanceManager" ]
+					"services": [ "InstanceManager", "MainConfig" ]
 				},
 				"set-user-groups": {
 					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\SetGroups",
-					"services": [ "InstanceManager" ]
+					"services": [ "InstanceManager", "MainConfig" ]
 				},
 				"refresh-links": {
 					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\RefreshLinks",
-					"services": [ "InstanceManager" ]
+					"services": [ "InstanceManager", "MainConfig" ]
 				},
 				"terminate-sessions": {
 					"class": "TuleapWikiFarm\\ProcessStep\\Maintenance\\TerminateSessions",
-					"services": [ "InstanceManager" ]
+					"services": [ "InstanceManager", "MainConfig" ]
 				}
 			}
 		}

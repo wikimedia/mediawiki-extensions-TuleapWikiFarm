@@ -2,8 +2,8 @@
 
 namespace TuleapWikiFarm\ProcessStep;
 
+use Config;
 use Exception;
-use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\IProcessStep;
@@ -11,6 +11,8 @@ use TuleapWikiFarm\IProcessStep;
 class InstallInstance implements IProcessStep {
 	/** @var InstanceManager */
 	private $manager;
+	/** @var Config */
+	private $config;
 	/** @var string */
 	private $dbServer;
 	/** @var string */
@@ -34,11 +36,12 @@ class InstallInstance implements IProcessStep {
 
 	/**
 	 * @param InstanceManager $manager
+	 * @param Config $config
 	 * @param array $args
 	 * @return static
 	 * @throws Exception
 	 */
-	public static function factory( InstanceManager $manager, $args ) {
+	public static function factory( InstanceManager $manager, Config $config, $args ) {
 		$required = [
 			'dbserver', 'dbuser', 'dbpass', 'dbprefix',
 			'lang', 'server', 'adminuser', 'adminpass', 'project_id'
@@ -50,14 +53,15 @@ class InstallInstance implements IProcessStep {
 		}
 
 		return new static(
-			$manager, $args['dbserver'], $args['dbuser'], $args['dbpass'], $args['project_id'],
-			$args['dbprefix'], $args['lang'], $args['server'], $args['adminuser'],
-			$args['adminpass'], $args['extra'] ?? []
+			$manager, $config, $args['dbserver'], $args['dbuser'], $args['dbpass'],
+			$args['project_id'], $args['dbprefix'], $args['lang'], $args['server'],
+			$args['adminuser'], $args['adminpass'], $args['extra'] ?? []
 		);
 	}
 
 	/**
 	 * @param InstanceManager $manager
+	 * @param Config $config
 	 * @param string $dbserver
 	 * @param string $dbuser
 	 * @param string $dbpass
@@ -70,10 +74,11 @@ class InstallInstance implements IProcessStep {
 	 * @param array $extra
 	 */
 	public function __construct(
-		InstanceManager $manager, $dbserver, $dbuser, $dbpass, $projectId,
+		InstanceManager $manager, Config $config, $dbserver, $dbuser, $dbpass, $projectId,
 		$dbprefix, $lang, $server, $adminuser, $adminpass, $extra = []
 	) {
 		$this->manager = $manager;
+		$this->config = $config;
 		$this->dbServer = $dbserver;
 		$this->dbUser = $dbuser;
 		$this->dbPass = $dbpass;
@@ -102,14 +107,9 @@ class InstallInstance implements IProcessStep {
 		// This cannot be changed
 		$this->extra['projectId'] = $this->projectId;
 
-		$phpBinaryFinder = new ExecutableFinder();
-		$phpBinaryPath = $phpBinaryFinder->find( 'php' );
-		if ( !$phpBinaryPath ) {
-			throw new Exception( 'PHP executable not found' );
-		}
 		// We must run this in isolation, as to not override globals, services...
 		$process = new Process( [
-			$phpBinaryPath,
+			$this->config->get( 'PhpCli' ),
 			$GLOBALS['IP'] . '/extensions/TuleapWikiFarm/maintenance/installInstance.php',
 			'--scriptpath', $scriptPath,
 			'--dbname', $dbName,

@@ -59,7 +59,7 @@ class CreateInstanceHandler extends AuthorizedHandler {
 			'install-instance' => [
 				'factory' => InstallInstance::class . '::factory',
 				'args' => [ $body ],
-				'services' => [ 'InstanceManager' ]
+				'services' => [ 'InstanceManager', 'MainConfig' ]
 			],
 			'set-instance-status' => [
 				'class' => SetInstanceStatus::class,

@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Component\Process\ExecutableFinder;
+use MediaWiki\MediaWikiServices;
 use Symfony\Component\Process\Process;
 
 require_once dirname( dirname( dirname( __DIR__ ) ) ) . '/maintenance/Maintenance.php';
@@ -13,14 +13,13 @@ class RunForAll extends Maintenance {
 	}
 
 	public function execute() {
-		$manager = \MediaWiki\MediaWikiServices::getInstance()->getService( 'InstanceManager' );
+		$manager = MediaWikiServices::getInstance()->getService( 'InstanceManager' );
+		$config = MediaWikiServices::getInstance()->getMainConfig();
 
 		foreach ( $manager->getStore()->getInstanceNames() as $name ) {
-			$phpBinaryFinder = new ExecutableFinder();
-			$phpBinaryPath = $phpBinaryFinder->find( 'php' );
 			$process = new Process( array_merge(
 				[
-					$phpBinaryPath, $this->getOption( 'script' ),
+					$config->get( 'PhpCli' ), $this->getOption( 'script' ),
 				],
 				explode( ' ', $this->getOption( 'args' ) ),
 				[ '--sfr', $name ]

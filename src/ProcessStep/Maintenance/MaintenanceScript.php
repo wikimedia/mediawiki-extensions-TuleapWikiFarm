@@ -2,8 +2,8 @@
 
 namespace TuleapWikiFarm\ProcessStep\Maintenance;
 
+use Config;
 use Exception;
-use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
@@ -12,6 +12,8 @@ use TuleapWikiFarm\IProcessStep;
 abstract class MaintenanceScript implements IProcessStep {
 	/** @var InstanceManager */
 	private $manager;
+	/** @var Config */
+	protected $config;
 	/** @var int */
 	private $instanceId;
 	/** @var array */
@@ -21,14 +23,16 @@ abstract class MaintenanceScript implements IProcessStep {
 
 	/**
 	 * @param InstanceManager $manager
+	 * @param Config $config
 	 * @param null $id
 	 * @param array $args
 	 * @param bool $noOutput
 	 */
 	public function __construct(
-		InstanceManager $manager, $id = null, $args = [], $noOutput = false
+		InstanceManager $manager, Config $config, $id = null, $args = [], $noOutput = false
 	) {
 		$this->manager = $manager;
+		$this->config = $config;
 		$this->instanceId = $id;
 		$this->args = $args;
 		$this->noOutput = $noOutput;
@@ -79,12 +83,7 @@ abstract class MaintenanceScript implements IProcessStep {
 	 * @return string|null
 	 */
 	private function getPhpExecutable() {
-		$phpBinaryFinder = new ExecutableFinder();
-		$phpExec = $phpBinaryFinder->find( 'php' );
-		if ( !$phpExec ) {
-			throw new Exception( 'PHP executable not found' );
-		}
-		return $phpExec;
+		return $this->config->get( 'PhpCli' );
 	}
 
 	/**
