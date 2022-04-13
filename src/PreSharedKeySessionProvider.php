@@ -2,9 +2,11 @@
 
 namespace TuleapWikiFarm;
 
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Session\ImmutableSessionProviderWithCookie;
 use MediaWiki\Session\SessionInfo;
 use MediaWiki\Session\UserInfo;
+use MWGrants;
 use WebRequest;
 
 class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
@@ -26,6 +28,16 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 		$token = substr( $header, 7 );
 		if ( $this->tokenValid( $token ) ) {
 			$user = \User::newSystemUser( 'Mediawiki default' );
+
+			$services = MediaWikiServices::getInstance();
+
+			if ( method_exists( $services, 'getGrantsInfo' ) ) {
+				// MW 1.38+
+				$rights = $services->getGrantsInfo()->getGrantRights( [ 'farm-management' ] );
+			} else {
+				$rights = MWGrants::getGrantRights( [ 'farm-management' ] );
+			}
+
 			return new SessionInfo( SessionInfo::MAX_PRIORITY, [
 				'provider' => $this,
 				'id' => null,
@@ -34,7 +46,7 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 				'forceUse' => true,
 				'metadata' => [
 					'app' => 'tuleap',
-					'rights' => \MWGrants::getGrantRights( [ 'farm-management' ] ),
+					'rights' => $rights,
 				],
 			] );
 		}
