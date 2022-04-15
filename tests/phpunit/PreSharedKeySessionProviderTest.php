@@ -18,7 +18,7 @@ class PreSharedKeySessionProviderTest extends TestCase {
 	public function testGetSessionInfo( $localSecret, $remoteHeader, $shouldProvide ) {
 		$provider = new PreSharedKeySessionProvider();
 		$configMock = $this->createMock( \Config::class );
-		$configMock->method( 'get' )->willReturnCallback( function ( $name ) use ( $localSecret ) {
+		$configMock->method( 'get' )->willReturnCallback( static function ( $name ) use ( $localSecret ) {
 			if ( $name === 'TuleapPreSharedKey' ) {
 				return $localSecret;
 			}
@@ -29,7 +29,7 @@ class PreSharedKeySessionProviderTest extends TestCase {
 
 		$requestMock = $this->createMock( \WebRequest::class );
 		$requestMock->method( 'getHeader' )->willReturnCallback(
-			function ( $name ) use ( $remoteHeader ) {
+			static function ( $name ) use ( $remoteHeader ) {
 				if ( $name === 'Authorization' ) {
 					return $remoteHeader;
 				}

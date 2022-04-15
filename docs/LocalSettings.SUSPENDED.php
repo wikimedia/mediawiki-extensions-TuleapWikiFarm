@@ -16,7 +16,7 @@ $GLOBALS['wgGroupPermissions'] = [
 ];
 
 // ... and display a banner
-$GLOBALS['wgHooks']['BeforePageDisplay'][] = function ( OutputPage $out, Skin $skin ) {
+$GLOBALS['wgHooks']['BeforePageDisplay'][] = static function ( OutputPage $out, Skin $skin ) {
 	$out->addHTML(
 		Html::rawElement( 'div', [
 			'style' =>

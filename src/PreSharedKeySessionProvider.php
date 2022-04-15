@@ -67,7 +67,7 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 			$timestamp + $this->acceptableLeeway + 1
 		);
 
-		return array_map( function ( $ts ) use ( $secret ) {
+		return array_map( static function ( $ts ) use ( $secret ) {
 			return hash_hmac( 'sha256', $secret, $ts );
 		}, $allowedTimestamps );
 	}
