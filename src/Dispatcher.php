@@ -61,12 +61,6 @@ class Dispatcher {
 
 	/**
 	 *
-	 * @var string
-	 */
-	private $mainSettingsFile = '';
-
-	/**
-	 *
 	 * @var string[]
 	 */
 	private $filesToRequire = [];
@@ -83,12 +77,9 @@ class Dispatcher {
 
 		if ( $this->isInstanceWikiCall() ) {
 			$this->initInstanceVaultPathname();
-			$this->mainSettingsFile = "{$this->instanceVaultPathname}/LocalSettings.php";
 
 			$this->redirectIfNoInstance();
 			$this->redirectIfNotReady();
-
-			$this->includeMainSettingsFile();
 			$this->setupEnvironment();
 		} else {
 			$this->setupEnvironment( false );
@@ -110,10 +101,17 @@ class Dispatcher {
 			if ( empty( $name ) ) {
 				$name = 'w';
 			}
-			$this->instance = $this->manager->getStore()->getInstanceByName( $name );
+			$idType = 'name';
+			if ( is_numeric( $name ) && is_int( $name + 0 ) ) {
+				$id = (int)$name;
+				$this->instance = $this->manager->getStore()->getInstanceById( $id );
+				$idType = 'project_id';
+			} else {
+				$this->instance = $this->manager->getStore()->getInstanceByName( $name );
+			}
 
 			if ( !$this->instance ) {
-				echo "Invalid instance: $name";
+				echo "Invalid instance $idType: $name";
 				die();
 			}
 			// We need to reset let the maintenance script reload the arguments, as we now have
@@ -188,8 +186,10 @@ class Dispatcher {
 
 		if ( $forInstance ) {
 			$this->globals['wgCacheDirectory'] = "{$this->instanceVaultPathname}/cache";
+			$this->globals['wgSitename'] = $this->instance->getName();
 			$this->globals['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
-			$this->globals['wgTuleapProjectId'] = $this->instance->getDataItem( 'projectId' );
+			$this->globals['wgTuleapProjectId'] = $this->instance->getId();
+			$this->globals['wgDBname'] = $this->instance->getDatabaseName();
 			$this->globals['wgTuleapData'] = $this->instance->getData();
 			define( 'WIKI_FARMING', true );
 		}
@@ -220,10 +220,6 @@ class Dispatcher {
 
 	private function includeTuleapFile() {
 		$this->doInclude( $this->globals['IP'] . '/LocalSettings.Tuleap.php' );
-	}
-
-	private function includeMainSettingsFile() {
-		$this->doInclude( $this->mainSettingsFile );
 	}
 
 	/**

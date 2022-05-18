@@ -40,8 +40,10 @@ class InstanceManager {
 	 * @return bool
 	 */
 	public function isCreatable( string $name ) {
+		// We check for both direct name and possible script path
+		// (Test wiki and Test-wiki would have the same ScriptPath, altough names are different)
 		return $this->checkInstanceNameValidity( $name ) &&
-			!$this->getStore()->instanceExists( $name );
+			!$this->getStore()->instanceExists( $name, $this->generateScriptPathForName( $name ) );
 	}
 
 	/**
@@ -49,7 +51,14 @@ class InstanceManager {
 	 * @return string
 	 */
 	public function generateScriptPath( InstanceEntity $instance ) {
-		$name = $instance->getName();
+		return $this->generateScriptPathForName( $instance->getName() );
+	}
+
+	/**
+	 * @param string $name
+	 * @return string
+	 */
+	public function generateScriptPathForName( $name ) {
 		$name = str_replace( ' ', '-', $name );
 		$name = str_replace( '_', '-', $name );
 
@@ -58,41 +67,19 @@ class InstanceManager {
 
 	/**
 	 * @param string $name
+	 * @param int $id
 	 * @return InstanceEntity
 	 */
-	public function getNewInstance( $name ) {
-		return new InstanceEntity( $name, new DateTime() );
+	public function getNewInstance( $name, $id ) {
+		return new InstanceEntity( $name, $id, new DateTime() );
 	}
 
 	/**
-	 * @param InstanceEntity $entity
-	 * @param string $newName
-	 * @return InstanceEntity
-	 */
-	public function getRenamedInstanceEntity( InstanceEntity $entity, $newName ) {
-		$newEntity = new InstanceEntity(
-			$newName,
-			$entity->getCreatedAt(),
-			$entity->getId(),
-			null,
-			$entity->getDatabaseName(),
-			null,
-			$entity->getStatus(),
-			$entity->getData()
-		);
-
-		$newEntity->setDirectory( $this->generateInstanceDirectoryName( $newEntity ) );
-		$newEntity->setScriptPath( $this->generateScriptPath( $newEntity ) );
-
-		return $newEntity;
-	}
-
-	/**
-	 * @param int $projectId
+	 * @param InstanceEntity $instance
 	 * @return false|string
 	 */
-	public function generateDbName( $projectId ) {
-		return "mediawiki_$projectId";
+	public function generateDbName( InstanceEntity $instance ) {
+		return "plugin_mediawiki_{$instance->getId()}";
 	}
 
 	/**
@@ -100,8 +87,7 @@ class InstanceManager {
 	 * @return string
 	 */
 	public function generateInstanceDirectoryName( InstanceEntity $entity ) {
-		$dirName = str_replace( ' ', '_', $entity->getName() );
-		return "/{$dirName}";
+		return "/{$entity->getId()}";
 	}
 
 	/**
@@ -130,28 +116,6 @@ class InstanceManager {
 	}
 
 	/**
-	 * @param InstanceEntity $entity
-	 * @param string $var
-	 * @param string $old
-	 * @param string $new
-	 * @return bool
-	 */
-	public function replaceConfigVar( InstanceEntity $entity, $var, $old, $new ): bool {
-		$filePath = $this->getDirectoryForInstance( $entity, 'LocalSettings.php' );
-		if ( !file_exists( $filePath ) ) {
-			return false;
-		}
-		$content = file_get_contents( $filePath );
-		$re = '/((\$GLOBALS\[\'' . $var . '\'\]|\$' . $var . ') = [\"\'])(.*?)([\"\'])/m';
-		$content = preg_replace( $re, "$1{$new}$4", $content );
-
-		if ( $content === null ) {
-			throw new \Exception( preg_last_error_msg() );
-		}
-		return file_put_contents( $filePath, $content );
-	}
-
-	/**
 	 * @param InstanceEntity $instance
 	 * @param string $status
 	 * @return bool
@@ -160,5 +124,13 @@ class InstanceManager {
 	public function setInstanceStatus( InstanceEntity $instance, $status ) {
 		$instance->setStatus( $status );
 		return $this->store->storeEntity( $instance );
+	}
+
+	/**
+	 * @param int $projectId
+	 * @return bool
+	 */
+	public function isProjectIdAssigned( $projectId ) {
+		return $this->getStore()->getInstanceById( $projectId ) instanceof InstanceEntity;
 	}
 }

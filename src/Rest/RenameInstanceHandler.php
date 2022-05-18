@@ -4,10 +4,6 @@ namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Rest\HttpException;
 use TuleapWikiFarm\InstanceManager;
-use TuleapWikiFarm\ProcessStep\Maintenance\RefreshLinks;
-use TuleapWikiFarm\ProcessStep\Maintenance\Update;
-use TuleapWikiFarm\ProcessStep\RenameInstance;
-use TuleapWikiFarm\StepProcess;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class RenameInstanceHandler extends AuthorizedHandler {
@@ -33,8 +29,7 @@ class RenameInstanceHandler extends AuthorizedHandler {
 		$target = $params['newname'];
 
 		if (
-			!$this->instanceManager->checkInstanceNameValidity( $source ) ||
-			!$this->instanceManager->getStore()->instanceExists( $source )
+			$this->instanceManager->isCreatable( $source )
 		) {
 			throw new HttpException( 'Source instance invalid', 422 );
 		}
@@ -42,38 +37,13 @@ class RenameInstanceHandler extends AuthorizedHandler {
 			throw new HttpException( 'Target instance name invalid, or already exists', 422 );
 		}
 
-		$process = new StepProcess( [
-			'rename-instance' => [
-				'class' => RenameInstance::class,
-				'args' => [ $source, $target ],
-				'services' => [ 'InstanceManager' ]
-			],
-			'update' => [
-				'class' => Update::class,
-				'args' => [ null, '', true ],
-				'services' => [ 'InstanceManager' ]
-			],
-			'refresh-links' => [
-				'class' => RefreshLinks::class,
-				'args' => [ null, '', true ],
-				'services' => [ 'InstanceManager' ]
-			]
-		] );
+		$entity = $this->instanceManager->getStore()->getInstanceByName( $source );
+		$entity->setName( $target );
+		$entity->setScriptPath( $this->instanceManager->generateScriptPath( $entity ) );
 
-		$response = [];
-		try {
-			$data = $process->process();
-			$response['status'] = 'success';
-			$response['output'] = $data;
-		} catch ( \Exception $ex ) {
-			$response['status'] = 'error';
-			$response['error'] = [
-				'code' => $ex->getCode(),
-				'message' => $ex->getMessage(),
-				'trace' => $ex->getTraceAsString(),
-			];
-		}
-		return $this->getResponseFactory()->createJson( $response );
+		$success = $this->instanceManager->getStore()->storeEntity( $entity );
+
+		return $this->getResponseFactory()->createJson( [ 'status' => $success ] );
 	}
 
 	/**

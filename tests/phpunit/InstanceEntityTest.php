@@ -14,7 +14,7 @@ class InstanceEntityTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->instance = new InstanceEntity(
-			'Dummy', new \DateTime(), null, '/dummy',
+			'Dummy', 101, new \DateTime(), '/101',
 			'tuleap_dummy', '/dummy', InstanceEntity::STATE_INITIALIZING
 		);
 	}
@@ -35,21 +35,16 @@ class InstanceEntityTest extends TestCase {
 
 	/**
 	 * @covers \TuleapWikiFarm\InstanceEntity::getId
-	 * @covers \TuleapWikiFarm\InstanceEntity::setId
 	 */
-	public function testGetSetId() {
-		$this->assertNull( $this->instance->getId() );
-		$this->instance->setId( 1 );
-		$this->assertSame( 1, $this->instance->getId() );
-		$this->expectException( \Exception::class );
-		$this->instance->setId( 2 );
+	public function testGetId() {
+		$this->assertSame( 101, $this->instance->getId() );
 	}
 
 	/**
 	 * @covers \TuleapWikiFarm\InstanceEntity::getDirectory
 	 */
 	public function testGetDirectory() {
-		$this->assertSame( '/dummy', $this->instance->getDirectory() );
+		$this->assertSame( '/101', $this->instance->getDirectory() );
 	}
 
 	/**
@@ -91,7 +86,10 @@ class InstanceEntityTest extends TestCase {
 	 * @covers \TuleapWikiFarm\InstanceEntity::setDataItem
 	 */
 	public function testGetSetData() {
-		$this->assertSame( [], $this->instance->getData() );
+		$this->assertSame( [
+			// auto added
+			'project_id' => 101
+		], $this->instance->getData() );
 
 		$this->instance->setDataItem( 'foo', 'bar' );
 		$this->assertSame( 'bar', $this->instance->getDataItem( 'foo' ) );
@@ -102,6 +100,7 @@ class InstanceEntityTest extends TestCase {
 	 * @covers \TuleapWikiFarm\InstanceEntity::setDirty
 	 */
 	public function testDirty() {
+		$this->instance->setDirty( false );
 		$this->assertFalse( $this->instance->isDirty() );
 		// Make a change to make it dirty
 		$this->instance->setDatabaseName( 'tuleap_test' );

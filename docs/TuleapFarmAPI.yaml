@@ -137,7 +137,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ProcessResponse'
+                                $ref: '#/components/schemas/SuccessResponse'
                 404:
                     description: Instance not found
                     content: {}
@@ -256,7 +256,6 @@ components:
     schemas:
         CreateConfiguration:
             required:
-                - adminpass
                 - project_id
             type: object
             properties:
@@ -266,12 +265,8 @@ components:
                     type: string
                 dbpass:
                     type: string
-                adminuser:
-                    type: string
                 project_id:
                     type: integer
-                adminpass:
-                    type: string
                 lang:
                     type: string
                 extra:

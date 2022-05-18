@@ -91,7 +91,8 @@ class MaintenanceHandler extends AuthorizedHandler {
 		if ( $contentType === 'application/json' ) {
 			return new JsonBodyValidator( [] );
 		}
-		return parent::getBodyValidator( $contentType );
+
+		throw new HttpException( 'Content-Type header must be application/json' );
 	}
 
 	/**

@@ -1,3 +1,5 @@
 {
-	"tuleapwikifarm-desc": "Farm management over Tuleap"
+	"tuleapwikifarm-desc": "Farm management over Tuleap",
+	"action-tuleap-farm-manage": "manage wiki instances within Tuleap",
+	"right-tuleap-farm-manage": "Manage wiki instances within Tuleap"
 }

@@ -21,16 +21,10 @@ class InstallInstance implements IProcessStep {
 	private $dbPass;
 	/** @var string */
 	private $dbPrefix;
-	/** @var int */
-	private $projectId;
 	/** @var string */
 	private $lang;
 	/** @var string */
 	private $server;
-	/** @var string */
-	private $adminUser;
-	/** @var string */
-	private $adminPass;
 	/** @var array */
 	private $extra;
 
@@ -43,8 +37,7 @@ class InstallInstance implements IProcessStep {
 	 */
 	public static function factory( InstanceManager $manager, Config $config, $args ) {
 		$required = [
-			'dbserver', 'dbuser', 'dbpass', 'dbprefix',
-			'lang', 'server', 'adminuser', 'adminpass', 'project_id'
+			'dbserver', 'dbuser', 'dbpass', 'dbprefix', 'lang', 'server'
 		];
 		foreach ( $required as $key ) {
 			if ( !isset( $args[$key] ) ) {
@@ -54,8 +47,7 @@ class InstallInstance implements IProcessStep {
 
 		return new static(
 			$manager, $config, $args['dbserver'], $args['dbuser'], $args['dbpass'],
-			$args['project_id'], $args['dbprefix'], $args['lang'], $args['server'],
-			$args['adminuser'], $args['adminpass'], $args['extra'] ?? []
+			$args['dbprefix'], $args['lang'], $args['server'], $args['extra'] ?? []
 		);
 	}
 
@@ -65,29 +57,23 @@ class InstallInstance implements IProcessStep {
 	 * @param string $dbserver
 	 * @param string $dbuser
 	 * @param string $dbpass
-	 * @param int $projectId
 	 * @param string $dbprefix
 	 * @param string $lang
 	 * @param string $server
-	 * @param string $adminuser
-	 * @param string $adminpass
 	 * @param array $extra
 	 */
 	public function __construct(
-		InstanceManager $manager, Config $config, $dbserver, $dbuser, $dbpass, $projectId,
-		$dbprefix, $lang, $server, $adminuser, $adminpass, $extra = []
+		InstanceManager $manager, Config $config, $dbserver, $dbuser, $dbpass,
+		$dbprefix, $lang, $server, $extra = []
 	) {
 		$this->manager = $manager;
 		$this->config = $config;
 		$this->dbServer = $dbserver;
 		$this->dbUser = $dbuser;
 		$this->dbPass = $dbpass;
-		$this->projectId = $projectId;
 		$this->dbPrefix = $dbprefix;
 		$this->lang = $lang;
 		$this->server = $server;
-		$this->adminUser = $adminuser;
-		$this->adminPass = $adminpass;
 		$this->extra = $extra;
 	}
 
@@ -103,9 +89,8 @@ class InstallInstance implements IProcessStep {
 		}
 
 		$scriptPath = $this->manager->generateScriptPath( $instance );
-		$dbName = $this->manager->generateDbName( $this->projectId );
-		// This cannot be changed
-		$this->extra['projectId'] = $this->projectId;
+		$dbName = $this->manager->generateDbName( $instance );
+		$adminPass = bin2hex( random_bytes( 16 ) );
 
 		// We must run this in isolation, as to not override globals, services...
 		$process = new Process( [
@@ -119,8 +104,8 @@ class InstallInstance implements IProcessStep {
 			'--server', $this->server,
 			'--lang', $this->lang,
 			'--instanceName', $instance->getName(),
-			'--adminuser', $this->adminUser,
-			'--adminpass', $this->adminPass,
+			'--adminuser', 'WikiSysop',
+			'--adminpass', $adminPass,
 			'--instanceDir', $this->manager->getDirectoryForInstance( $instance )
 		] );
 
@@ -136,10 +121,13 @@ class InstallInstance implements IProcessStep {
 		}
 
 		$instance->setDatabaseName( $dbName );
-		$instance->setData( $this->extra );
 		$instance->setScriptPath( $scriptPath );
 		$this->manager->getStore()->storeEntity( $instance );
 
-		return [ 'id' => $instance->getId() ];
+		return [
+			'id' => $instance->getId(),
+			'admin_user' => 'WikiSysop',
+			'admin_pass' => $adminPass
+		];
 	}
 }
