@@ -51,10 +51,12 @@ class InstanceStore {
 
 	/**
 	 * @param string $name
+	 * @param string $scriptPath
 	 * @return bool
 	 */
-	public function instanceExists( $name ): bool {
-		return count( $this->query( [ 'ti_name' => $name ] ) ) > 0;
+	public function instanceExists( $name, $scriptPath ): bool {
+		return count( $this->query( [ 'ti_name' => $name ] ) ) > 0
+			|| count( $this->query( [ 'ti_script_path' => $scriptPath ] ) ) > 0;
 	}
 
 	/**
@@ -67,7 +69,7 @@ class InstanceStore {
 			throw new Exception( "Root instance not writable" );
 		}
 		$db = $this->loadBalancer->getConnection( DB_PRIMARY );
-		if ( $entity->getId() !== null ) {
+		if ( $this->getInstanceById( $entity->getId() ) instanceof InstanceEntity ) {
 			$res = $db->update(
 				static::TABLE,
 				$entity->dbSerialize(),
@@ -84,7 +86,7 @@ class InstanceStore {
 
 		$res = $db->insert(
 			static::TABLE,
-			$entity->dbSerialize(),
+			array_merge( [ 'ti_id' => $entity->getId() ], $entity->dbSerialize() ),
 			__METHOD__
 		);
 
@@ -92,7 +94,6 @@ class InstanceStore {
 			return false;
 		}
 
-		$entity->setId( $db->insertId() );
 		$entity->setDirty( false );
 		return $res;
 	}
@@ -173,8 +174,8 @@ class InstanceStore {
 
 		return new InstanceEntity(
 			$row->ti_name,
-			\DateTime::createFromFormat( 'YmdHis', $row->ti_created_at ),
 			(int)$row->ti_id,
+			\DateTime::createFromFormat( 'YmdHis', $row->ti_created_at ),
 			$row->ti_directory,
 			$row->ti_database,
 			$row->ti_script_path,

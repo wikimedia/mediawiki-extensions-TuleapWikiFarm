@@ -7,7 +7,7 @@ use DateTime;
 class RootInstanceEntity extends InstanceEntity {
 	public function __construct() {
 		parent::__construct(
-			'w', new DateTime(), 0, '/w', '', '/mediawiki/w', InstanceEntity::STATE_READY
+			'w', 0, new DateTime(), '/w', '', '/mediawiki/w', InstanceEntity::STATE_READY
 		);
 	}
 }

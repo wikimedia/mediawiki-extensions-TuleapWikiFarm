@@ -10,8 +10,8 @@ class InstanceEntity implements \JsonSerializable {
 	public const STATE_MAINTENANCE = 'maintenance';
 	public const STATE_SUSPENDED = 'suspended';
 
-	private bool $dirty = false;
-	/** @var int|null */
+	private $dirty = false;
+	/** @var int */
 	private $id;
 	/** @var string */
 	private $name;
@@ -30,8 +30,8 @@ class InstanceEntity implements \JsonSerializable {
 
 	/**
 	 * @param string $name
-	 * @param DateTime $created
 	 * @param int|null $id
+	 * @param DateTime $created
 	 * @param string|null $directory
 	 * @param string|null $database
 	 * @param string|null $scriptPath
@@ -39,7 +39,7 @@ class InstanceEntity implements \JsonSerializable {
 	 * @param array|null $data
 	 */
 	public function __construct(
-		$name, DateTime $created, $id = null, $directory = null, $database = null,
+		string $name, int $id, DateTime $created, $directory = null, $database = null,
 		$scriptPath = null, $status = 'initializing', $data = []
 	) {
 		$this->id = $id;
@@ -50,6 +50,7 @@ class InstanceEntity implements \JsonSerializable {
 		$this->created = $created;
 		$this->status = $status;
 		$this->data = $data;
+		$this->setDataItem( 'project_id', $this->id );
 	}
 
 	/**
@@ -74,21 +75,18 @@ class InstanceEntity implements \JsonSerializable {
 	}
 
 	/**
-	 * @param int $id
-	 */
-	public function setId( int $id ) {
-		if ( $this->id !== null ) {
-			throw new \BadMethodCallException( 'Cannot set ID on existing entities' );
-		}
-		$this->setDirty( true );
-		$this->id = $id;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getName(): string {
 		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 */
+	public function setName( string $name ) {
+		$this->name = $name;
+		$this->setDirty( true );
 	}
 
 	/**

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS /*$wgDBprefix*/tuleap_instances (
-	`ti_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`ti_id` INT UNSIGNED NOT NULL,
 	`ti_name` VARCHAR(255) NOT NULL,
 	`ti_status` VARCHAR(255) NOT NULL,
 	`ti_created_at` VARCHAR(14) NOT NULL,

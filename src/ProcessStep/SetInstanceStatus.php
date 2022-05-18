@@ -37,6 +37,6 @@ class SetInstanceStatus implements IProcessStep {
 
 		$this->manager->getStore()->storeEntity( $entity );
 
-		return [ 'id' => $entity->getId() ];
+		return $data;
 	}
 }

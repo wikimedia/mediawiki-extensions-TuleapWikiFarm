@@ -2,6 +2,7 @@
 
 namespace TuleapWikiFarm\Tests;
 
+use HashConfig;
 use PHPUnit\Framework\TestCase;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
@@ -17,7 +18,7 @@ class InstanceManagerTest extends TestCase {
 		parent::setUp();
 
 		$storeMock = $this->createMock( InstanceStore::class );
-		$this->manager = new InstanceManager( $storeMock );
+		$this->manager = new InstanceManager( $storeMock, new HashConfig( [] ) );
 	}
 
 	/**
@@ -34,32 +35,17 @@ class InstanceManagerTest extends TestCase {
 	public function testGenerateScriptPath() {
 		$instanceMock = $this->createMock( InstanceEntity::class );
 		$instanceMock->method( 'getName' )->willReturn( 'Foo_bar' );
-		$this->assertSame( '/Foo-bar', $this->manager->generateScriptPath( $instanceMock ) );
+		$this->assertSame( '/mediawiki/Foo-bar', $this->manager->generateScriptPath( $instanceMock ) );
 	}
 
 	/**
 	 * @covers \TuleapWikiFarm\InstanceManager::getNewInstance
 	 */
 	public function testGetNewInstance() {
-		$instance = $this->manager->getNewInstance( 'Foo' );
+		$instance = $this->manager->getNewInstance( 'Foo', 101 );
 		$this->assertInstanceOf( InstanceEntity::class, $instance );
 		$this->assertSame( 'Foo', $instance->getName() );
-		$this->assertNull( $instance->getId() );
-	}
-
-	/**
-	 * @covers \TuleapWikiFarm\InstanceManager::getRenamedInstanceEntity
-	 */
-	public function testGetRenamedInstance() {
-		$instanceMock = $this->createMock( InstanceEntity::class );
-		$instanceMock->method( 'getName' )->willReturn( 'Foo' );
-		$instanceMock->method( 'getId' )->willReturn( 3 );
-		$instanceMock->method( 'getDatabaseName' )->willReturn( 'bar' );
-
-		$renamed = $this->manager->getRenamedInstanceEntity( $instanceMock, 'Bar' );
-		$this->assertInstanceOf( InstanceEntity::class, $renamed );
-		$this->assertSame( 'Bar', $renamed->getName() );
-		$this->assertSame( 3, $renamed->getId() );
+		$this->assertSame( 101, $instance->getId() );
 	}
 
 	/**
