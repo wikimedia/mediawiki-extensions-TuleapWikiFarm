@@ -65,7 +65,6 @@
 			"tuleap-farm-manage": false
 		}
 	},
-	"callback": "mwsInitComponents",
 	"RestRoutes": [
 		{
 			"method": "PUT",
