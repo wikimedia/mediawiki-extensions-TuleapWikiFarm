@@ -41,5 +41,5 @@ class StoreAuthInfo extends Maintenance {
 
 }
 
-$maintClass = 'StoreAuthInfo';
+$maintClass = StoreAuthInfo::class;
 require_once RUN_MAINTENANCE_IF_MAIN;

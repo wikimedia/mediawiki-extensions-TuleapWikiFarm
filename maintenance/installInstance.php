@@ -50,5 +50,5 @@ class InstallInstance extends Maintenance {
 
 }
 
-$maintClass = 'InstallInstance';
+$maintClass = InstallInstance::class;
 require_once RUN_MAINTENANCE_IF_MAIN;
