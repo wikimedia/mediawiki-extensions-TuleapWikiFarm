@@ -36,5 +36,5 @@ class RunForAll extends Maintenance {
 	}
 }
 
-$maintClass = 'RunForAll';
+$maintClass = RunForAll::class;
 require_once RUN_MAINTENANCE_IF_MAIN;

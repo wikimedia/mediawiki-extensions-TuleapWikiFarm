@@ -65,5 +65,5 @@ class SetUserGroups extends Maintenance {
 	}
 }
 
-$maintClass = 'SetUserGroups';
+$maintClass = SetUserGroups::class;
 require_once RUN_MAINTENANCE_IF_MAIN;

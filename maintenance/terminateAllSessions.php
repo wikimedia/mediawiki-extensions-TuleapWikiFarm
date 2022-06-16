@@ -41,5 +41,5 @@ class TerminateAllSessions extends Maintenance {
 
 }
 
-$maintClass = 'TerminateAllSessions';
+$maintClass = TerminateAllSessions::class;
 require_once RUN_MAINTENANCE_IF_MAIN;
