@@ -17,7 +17,7 @@ class RegisterInstance extends Maintenance {
 		if ( !$name ) {
 			$this->fatalError( 'Param --projectname must have a value' );
 		}
-		$groupId = (int) $this->getOption( 'groupid', 0 );
+		$groupId = (int)$this->getOption( 'groupid', 0 );
 		if ( !$groupId ) {
 			$this->fatalError( 'Param --groupid must have an integer value' );
 		}
