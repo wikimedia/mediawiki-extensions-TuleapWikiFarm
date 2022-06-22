@@ -44,8 +44,6 @@ class InstallInstance extends Maintenance {
 		if ( !$status->isOk() ) {
 			$this->fatalError( $status->getMessage()->plain() );
 		}
-
-		$installer->writeConfigurationFile( $this->getOption( 'instanceDir' ) );
 	}
 
 }

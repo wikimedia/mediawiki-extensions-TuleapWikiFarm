@@ -45,10 +45,14 @@ class CreateInstanceHandler extends AuthorizedHandler {
 		$body['dbprefix'] = $this->config->get( 'DBprefix' );
 		$body['server'] = $this->config->get( 'Server' );
 
+		if ( $this->instanceManager->isProjectIdAssigned( $body['project_id'] ) ) {
+			throw new HttpException( 'Instance for this project already exists', 422 );
+		}
+
 		$process = new StepProcess( [
 			'register-instance' => [
 				'class' => RegisterInstance::class,
-				'args' => [ $params['name'] ],
+				'args' => [ $params['name'], $body['project_id'] ],
 				'services' => [ 'InstanceManager' ]
 			],
 			'create-vault' => [
@@ -114,17 +118,6 @@ class CreateInstanceHandler extends AuthorizedHandler {
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBpassword' ),
 				],
-				'adminuser' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => false,
-					ParamValidator::PARAM_TYPE => 'string',
-					ParamValidator::PARAM_DEFAULT => 'WikiSysop'
-				],
-				'adminpass' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => true,
-					ParamValidator::PARAM_TYPE => 'string',
-				],
 				'project_id' => [
 					self::PARAM_SOURCE => 'body',
 					ParamValidator::PARAM_REQUIRED => true,
@@ -132,7 +125,7 @@ class CreateInstanceHandler extends AuthorizedHandler {
 				],
 			] );
 		}
-		return parent::getBodyValidator( $contentType );
+		throw new HttpException( 'Content-Type header must be application/json' );
 	}
 
 	/**

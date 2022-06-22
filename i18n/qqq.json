@@ -2,5 +2,7 @@
 	"@metadata": {
 		"authors": []
 	},
-	"tuleapwikifarm-desc": "Description of TuleapWikiFarm for [[Special:Version]]"
+	"tuleapwikifarm-desc": "Description of TuleapWikiFarm for [[Special:Version]]",
+	"action-tuleap-farm-manage": "{{doc-action|tuleap-farm-manage}}",
+	"right-tuleap-farm-manage": "{{doc-right|tuleap-farm-manage}}"
 }
