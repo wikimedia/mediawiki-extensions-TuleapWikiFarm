@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gomoko"
+			"Gomoko",
+			"Verdy p"
 		]
 	},
-	"tuleapwikifarm-desc": "Gestion de ferme sur Tuleap"
+	"tuleapwikifarm-desc": "Gestion de ferme sur Tuleap",
+	"action-tuleap-farm-manage": "gérer les instances de wiki dans Tuleap",
+	"right-tuleap-farm-manage": "Gérer les instances de wiki dans Tuleap"
 }
