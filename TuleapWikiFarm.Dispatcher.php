@@ -14,7 +14,8 @@ $manager = new InstanceManager(
 	$store,
 	new HashConfig(
 		$GLOBALS['wgTuleapFarmConfig']
-	)
+	),
+	new GlobalVarConfig( 'wg' )
 );
 $globalStorage = new \TuleapWikiFarm\GlobalStorage( $dbLB );
 

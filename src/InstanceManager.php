@@ -10,14 +10,18 @@ class InstanceManager {
 	private $store;
 	/** @var Config */
 	private $farmConfig;
+	/** @var Config */
+	private $mainConfig;
 
 	/**
 	 * @param InstanceStore $store
 	 * @param Config $farmConfig
+	 * @param Config $mainConfig
 	 */
-	public function __construct( InstanceStore $store, Config $farmConfig ) {
+	public function __construct( InstanceStore $store, Config $farmConfig, Config $mainConfig ) {
 		$this->store = $store;
 		$this->farmConfig = $farmConfig;
+		$this->mainConfig = $mainConfig;
 	}
 
 	/**
@@ -79,6 +83,9 @@ class InstanceManager {
 	 * @return false|string
 	 */
 	public function generateDbName( InstanceEntity $instance ) {
+		if ( $this->getUseSingleDb() ) {
+			return $this->mainConfig->get( 'DBname' );
+		}
 		return "plugin_mediawiki_{$instance->getId()}";
 	}
 
@@ -116,6 +123,13 @@ class InstanceManager {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function getUseSingleDb(): bool {
+		return $this->farmConfig->get( 'useSingleDb' );
+	}
+
+	/**
 	 * @param InstanceEntity $instance
 	 * @param string $status
 	 * @return bool
@@ -128,9 +142,16 @@ class InstanceManager {
 
 	/**
 	 * @param int $projectId
+	 * @param string $dbPrefix
+	 *
 	 * @return bool
 	 */
-	public function isProjectIdAssigned( $projectId ) {
-		return $this->getStore()->getInstanceById( $projectId ) instanceof InstanceEntity;
+	public function isProjectIdAssigned( $projectId, $dbPrefix ) {
+		$idTaken = $this->getStore()->getInstanceById( $projectId ) instanceof InstanceEntity;
+
+		if ( !$idTaken && $this->getUseSingleDb() ) {
+			return $this->getStore()->dbPrefixTaken( $dbPrefix );
+		}
+		return $idTaken;
 	}
 }

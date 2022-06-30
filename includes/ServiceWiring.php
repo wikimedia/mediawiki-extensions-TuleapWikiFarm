@@ -13,7 +13,8 @@ return [
 			$services->getService( 'InstanceStore' ),
 			new HashConfig(
 				$services->getMainConfig()->get( 'TuleapFarmConfig' )
-			)
+			),
+			$services->getMainConfig()
 		);
 	}
 ];

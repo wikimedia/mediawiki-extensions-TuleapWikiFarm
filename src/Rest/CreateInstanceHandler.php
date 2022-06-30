@@ -42,17 +42,22 @@ class CreateInstanceHandler extends AuthorizedHandler {
 		}
 
 		$body = $this->getValidatedBody();
-		$body['dbprefix'] = $this->config->get( 'DBprefix' );
 		$body['server'] = $this->config->get( 'Server' );
+		$dbPrefix = $body['dbprefix'] ?? '';
+		if ( $this->instanceManager->getUseSingleDb() && !$dbPrefix ) {
+			throw new HttpException(
+				'When configured to use single DB, param dbprefix must be set'
+			);
+		}
 
-		if ( $this->instanceManager->isProjectIdAssigned( $body['project_id'] ) ) {
+		if ( $this->instanceManager->isProjectIdAssigned( $body['project_id'], $dbPrefix ) ) {
 			throw new HttpException( 'Instance for this project already exists', 422 );
 		}
 
 		$process = new StepProcess( [
 			'register-instance' => [
 				'class' => RegisterInstance::class,
-				'args' => [ $params['name'], $body['project_id'] ],
+				'args' => [ $params['name'], $body['project_id'], $dbPrefix ],
 				'services' => [ 'InstanceManager' ]
 			],
 			'create-vault' => [

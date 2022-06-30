@@ -18,7 +18,7 @@ class InstanceManagerTest extends TestCase {
 		parent::setUp();
 
 		$storeMock = $this->createMock( InstanceStore::class );
-		$this->manager = new InstanceManager( $storeMock, new HashConfig( [] ) );
+		$this->manager = new InstanceManager( $storeMock, new HashConfig( [] ), new \GlobalVarConfig( 'wg' ) );
 	}
 
 	/**
@@ -46,6 +46,27 @@ class InstanceManagerTest extends TestCase {
 		$this->assertInstanceOf( InstanceEntity::class, $instance );
 		$this->assertSame( 'Foo', $instance->getName() );
 		$this->assertSame( 101, $instance->getId() );
+	}
+
+	/**
+	 * @covers \TuleapWikiFarm\InstanceManager::generateDbName
+	 */
+	public function testSingleDBUsage() {
+		$storeMock = $this->createMock( InstanceStore::class );
+		$configMock = $this->createMock( \GlobalVarConfig::class );
+		$configMock->method( 'get' )->willReturnCallback( static function ( $name ) {
+			if ( $name === 'DBname' ) {
+				return 'main_db';
+			}
+			return '';
+		} );
+		$manager = new InstanceManager( $storeMock, new HashConfig( [
+			'useSingleDb' => true,
+		] ), $configMock );
+		$instance = $manager->getNewInstance( 'Dummy', 101 );
+		$instance->setDatabasePrefix( 'foo_' );
+
+		$this->assertSame( 'main_db', $manager->generateDbName( $instance ) );
 	}
 
 	/**

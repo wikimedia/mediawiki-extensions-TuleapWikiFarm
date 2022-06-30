@@ -15,7 +15,7 @@ class InstanceEntityTest extends TestCase {
 		parent::setUp();
 		$this->instance = new InstanceEntity(
 			'Dummy', 101, new \DateTime(), '/101',
-			'tuleap_dummy', '/dummy', InstanceEntity::STATE_INITIALIZING
+			'tuleap_dummy', 'abc', '/dummy', InstanceEntity::STATE_INITIALIZING
 		);
 	}
 
@@ -31,6 +31,16 @@ class InstanceEntityTest extends TestCase {
 	 */
 	public function testGetCreatedAt() {
 		$this->assertInstanceOf( \DateTime::class, $this->instance->getCreatedAt() );
+	}
+
+	/**
+	 * @covers \TuleapWikiFarm\InstanceEntity::getDatabasePrefix
+	 * @covers \TuleapWikiFarm\InstanceEntity::setDatabasePrefix
+	 */
+	public function testGetSetDbPrefix() {
+		$this->assertSame( 'abc', $this->instance->getDatabasePrefix() );
+		$this->instance->setDatabasePrefix( '123_' );
+		$this->assertSame( '123_', $this->instance->getDatabasePrefix() );
 	}
 
 	/**

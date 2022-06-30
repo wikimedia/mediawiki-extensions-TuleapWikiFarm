@@ -19,6 +19,8 @@ class InstanceEntity implements \JsonSerializable {
 	private $directory;
 	/** @var string|null */
 	private $database;
+	/** @var string */
+	private $dbPrefix;
 	/** @var string|null */
 	private $scriptPath;
 	/** @var DateTime */
@@ -34,18 +36,20 @@ class InstanceEntity implements \JsonSerializable {
 	 * @param DateTime $created
 	 * @param string|null $directory
 	 * @param string|null $database
+	 * @param string $dbPrefix
 	 * @param string|null $scriptPath
 	 * @param string|null $status
 	 * @param array|null $data
 	 */
 	public function __construct(
 		string $name, int $id, DateTime $created, $directory = null, $database = null,
-		$scriptPath = null, $status = 'initializing', $data = []
+		$dbPrefix = '', $scriptPath = null, $status = 'initializing', $data = []
 	) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->directory = $directory;
 		$this->database = $database;
+		$this->dbPrefix = $dbPrefix;
 		$this->scriptPath = $scriptPath;
 		$this->created = $created;
 		$this->status = $status;
@@ -164,6 +168,21 @@ class InstanceEntity implements \JsonSerializable {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getDatabasePrefix(): string {
+		return $this->dbPrefix;
+	}
+
+	/**
+	 * @param string $prefix
+	 */
+	public function setDatabasePrefix( string $prefix ) {
+		$this->setDirty( true );
+		$this->dbPrefix = $prefix;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getData(): array {
@@ -203,6 +222,7 @@ class InstanceEntity implements \JsonSerializable {
 			'ti_name' => $this->name,
 			'ti_directory' => $this->directory,
 			'ti_database' => $this->database,
+			'ti_dbprefix' => $this->dbPrefix,
 			'ti_script_path' => $this->scriptPath,
 			'ti_created_at' => $this->created->format( 'YmdHis' ),
 			'ti_status' => $this->status,
@@ -215,6 +235,7 @@ class InstanceEntity implements \JsonSerializable {
 			'name' => $this->name,
 			'directory' => $this->directory,
 			'database' => $this->database,
+			'dbPrefix' => $this->dbPrefix,
 			'scriptPath' => $this->scriptPath,
 			'created' => $this->created->format( 'YmdHis' ),
 			'status' => $this->status,

@@ -10,6 +10,7 @@ class RegisterInstance extends Maintenance {
 		parent::__construct();
 		$this->addOption( 'projectname', '', true, true );
 		$this->addOption( 'groupid', '', false, true );
+		$this->addOption( 'dbprefix', '', false, true );
 	}
 
 	public function execute() {
@@ -26,12 +27,25 @@ class RegisterInstance extends Maintenance {
 		if ( !$manager->isCreatable( $name ) ) {
 			$this->fatalError( 'Instance with this name already exists' );
 		}
-		$entity = $manager->getStore()->getInstanceById( $groupId );
-		if ( $entity !== null ) {
-			$this->fatalError( 'Instance for this groupid already exists' );
+
+		$dbPrefix = $this->getOption( 'dbprefix' );
+		if ( $manager->getUseSingleDb() && !$dbPrefix ) {
+			$this->fatalError(
+				'When configured to use single database, param dbprefix must be set'
+			);
+		}
+		if ( $manager->isProjectIdAssigned( $groupId, $dbPrefix ) ) {
+			$this->fatalError( 'Instance for this groupid or dbprefix already exists' );
 		}
 
 		$entity = $manager->getNewInstance( $name, $groupId );
+		if ( $dbPrefix ) {
+			$entity->setDatabasePrefix( $dbPrefix );
+		}
+		$entity->setDirectory( $manager->generateInstanceDirectoryName( $entity ) );
+		$entity->setScriptPath( $manager->generateScriptPath( $entity ) );
+		$entity->setDatabaseName( $manager->generateDbName( $entity ) );
+		$entity->setStatus( \TuleapWikiFarm\InstanceEntity::STATE_READY );
 		if ( !$manager->getStore()->storeEntity( $entity ) ) {
 			$this->fatalError( "Could not register instance" );
 		}
