@@ -98,6 +98,7 @@ class InstallInstance implements IProcessStep {
 			$GLOBALS['IP'] . '/extensions/TuleapWikiFarm/maintenance/installInstance.php',
 			'--scriptpath', $scriptPath,
 			'--dbname', $dbName,
+			'--dbprefix', $this->dbPrefix,
 			'--dbuser', $this->dbUser,
 			'--dbpass', $this->dbPass,
 			'--dbserver', $this->dbServer,

@@ -15,6 +15,7 @@ class InstanceStore {
 		'ti_created_at',
 		'ti_script_path',
 		'ti_database',
+		'ti_dbprefix',
 		'ti_data'
 	];
 
@@ -162,6 +163,20 @@ class InstanceStore {
 	}
 
 	/**
+	 * @param string $prefix
+	 *
+	 * @return bool
+	 */
+	public function dbPrefixTaken( $prefix ) {
+		return (bool)$this->loadBalancer->getConnection( DB_REPLICA )->selectRow(
+			static::TABLE,
+			[ 'ti_dbprefix' ],
+			[ 'ti_dbprefix' => $prefix ],
+			__METHOD__
+		);
+	}
+
+	/**
 	 * @param \stdClass $row
 	 * @return InstanceEntity|null
 	 */
@@ -178,6 +193,7 @@ class InstanceStore {
 			\DateTime::createFromFormat( 'YmdHis', $row->ti_created_at ),
 			$row->ti_directory,
 			$row->ti_database,
+			$row->ti_dbprefix,
 			$row->ti_script_path,
 			$row->ti_status,
 			$row->ti_data ? json_decode( $row->ti_data, 1 ) : []

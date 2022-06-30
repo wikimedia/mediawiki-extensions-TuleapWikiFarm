@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS /*$wgDBprefix*/tuleap_instances (
 	`ti_created_at` VARCHAR(14) NOT NULL,
 	`ti_directory` VARCHAR(255) NULL,
     `ti_database` VARCHAR(255) NULL,
+    `ti_dbprefix` VARCHAR(255) NULL,
 	`ti_script_path` VARCHAR(255) NULL,
     `ti_data` BLOB NULL DEFAULT '',
     PRIMARY KEY ( `ti_id` )

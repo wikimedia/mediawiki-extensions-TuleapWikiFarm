@@ -11,6 +11,7 @@ class InstallInstance extends Maintenance {
 		$this->addOption( 'instanceName', '', true, true );
 		$this->addOption( 'dbserver', '', true, true );
 		$this->addOption( 'dbname', '', true, true );
+		$this->addOption( 'dbprefix', '', true, true );
 		$this->addOption( 'dbuser', '', true, true );
 		$this->addOption( 'dbpass', '', true, true );
 		$this->addOption( 'server', '', true, true );
@@ -30,6 +31,7 @@ class InstallInstance extends Maintenance {
 			$this->getOption( 'instanceName' ), $this->getOption( 'adminuser' ), [
 				'scriptpath' => $this->getOption( 'scriptpath' ),
 				'dbname' => $this->getOption( 'dbname' ),
+				'dbprefix' => $this->getOption( 'dbprefix' ),
 				'dbserver' => $this->getOption( 'dbserver' ),
 				'dbuser' => $this->getOption( 'dbuser' ),
 				'dbpass' => $this->getOption( 'dbpass' ),

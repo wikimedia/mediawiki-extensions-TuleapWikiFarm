@@ -190,6 +190,7 @@ class Dispatcher {
 			$this->globals['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
 			$this->globals['wgTuleapProjectId'] = $this->instance->getId();
 			$this->globals['wgDBname'] = $this->instance->getDatabaseName();
+			$this->globals['wgDBprefix'] = $this->instance->getDatabasePrefix();
 			$this->globals['wgTuleapData'] = $this->instance->getData();
 			define( 'WIKI_FARMING', true );
 		}
