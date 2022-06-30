@@ -2,9 +2,11 @@
 
 namespace TuleapWikiFarm;
 
+use Config;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Session\ImmutableSessionProviderWithCookie;
 use MediaWiki\Session\SessionInfo;
+use MediaWiki\Session\SessionManager;
 use MediaWiki\Session\UserInfo;
 use MWGrants;
 use WebRequest;
@@ -12,6 +14,31 @@ use WebRequest;
 class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 	/** @var int Tolerate timestamp difference in these many seconds */
 	private $acceptableLeeway = 10;
+	/** @var string|null */
+	private $preSharedKey = null;
+
+	/**
+	 * @param string|null $key
+	 */
+	public function setPreSharedKey( ?string $key ) {
+		$this->preSharedKey = $key;
+	}
+
+	/**
+	 * @param Config $config
+	 */
+	public function setConfig( Config $config ) {
+		parent::setConfig( $config );
+		$this->setPreSharedKey( $this->config->get( 'TuleapPreSharedKey' ) );
+	}
+
+	/**
+	 * Deprecation prevention for CI
+	 * @param SessionManager $manager
+	 */
+	public function setManagerOverride( SessionManager $manager ) {
+		$this->manager = $manager;
+	}
 
 	/**
 	 * @inheritDoc
@@ -59,13 +86,12 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 	 * @return bool
 	 */
 	private function tokenValid( $token ): bool {
-		$secret = $this->config->get( 'TuleapPreSharedKey' );
-		if ( !$secret ) {
+		if ( !$this->preSharedKey ) {
 			$this->logger->error( 'wgTuleapPreSharedKey is not set' );
 			return false;
 		}
 
-		return $this->matchAny( $token, $this->getAcceptableTokens( time(), $secret ) );
+		return $this->matchAny( $token, $this->getAcceptableTokens( time(), $this->preSharedKey ) );
 	}
 
 	/**
