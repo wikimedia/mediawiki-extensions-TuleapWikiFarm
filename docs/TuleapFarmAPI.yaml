@@ -229,7 +229,7 @@ paths:
                           - set-user-groups
                           - terminate-sessions
             requestBody:
-                description: Params to be passed to the script as input (example for set-user-groups)
+                description: Params to be passed to the script as input (example for set-user-groups). teminate-sessions also accepts body. Put in JSON with `user` key which specifies the username of the user to terminate sessions for
                 content:
                     application/json:
                         schema:
