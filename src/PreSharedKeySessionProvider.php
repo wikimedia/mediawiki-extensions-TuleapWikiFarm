@@ -18,18 +18,14 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 	private $preSharedKey = null;
 
 	/**
-	 * @param string|null $key
+	 * Main constructor. To be called by `ObjectFactory` as specified
+	 * in `extension.json/SessionProviders`.
+	 * @param Config $mainConfig
+	 * @param array $params
 	 */
-	public function setPreSharedKey( ?string $key ) {
-		$this->preSharedKey = $key;
-	}
-
-	/**
-	 * @param Config $config
-	 */
-	public function setConfig( Config $config ) {
-		parent::setConfig( $config );
-		$this->setPreSharedKey( $this->config->get( 'TuleapPreSharedKey' ) );
+	public function __construct( Config $mainConfig, array $params = [] ) {
+		parent::__construct( $params );
+		$this->preSharedKey = $mainConfig->get( 'TuleapPreSharedKey' );
 	}
 
 	/**
@@ -44,7 +40,8 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 	 * @inheritDoc
 	 */
 	public function provideSessionInfo( WebRequest $request ) {
-		if ( !defined( 'MW_PHPUNIT_TEST' ) && !defined( 'MW_REST_API' ) ) {
+		// Only relevant for the REST endpoint
+		if ( !defined( 'MW_REST_API' ) ) {
 			return null;
 		}
 
