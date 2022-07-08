@@ -7,7 +7,7 @@ class TerminateSessions extends MaintenanceScript {
 	 * @inheritDoc
 	 */
 	protected function getFormattedArgs(): array {
-		return [];
+		return [ '-u', $this->args['user'] ?? null ];
 	}
 
 	/**
