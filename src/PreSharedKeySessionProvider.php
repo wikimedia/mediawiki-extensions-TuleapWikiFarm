@@ -29,6 +29,20 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 	}
 
 	/**
+	 * Dedicated factory method to be called by an `ObjectFactory` in
+	 * `MediaWiki\Session\SessionManager`. This method is required in
+	 * MediaWiki 1.35, as `SessionManager` does not use the `ObjectFactory`
+	 * _service_, that allows o specify "services" in the spec. With
+	 * MediaWiki 1.39 this can be changes to the more declarative way in
+	 * `extension.json`
+	 * @return PreSharedKeySessionProvider
+	 */
+	public static function factory() {
+		$mainConfig = MediaWikiServices::getInstance()->getMainConfig();
+		return new static( $mainConfig );
+	}
+
+	/**
 	 * Deprecation prevention for CI
 	 * @param SessionManager $manager
 	 */

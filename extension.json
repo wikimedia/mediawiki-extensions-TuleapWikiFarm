@@ -123,8 +123,7 @@
 	},
 	"SessionProviders": {
 		"TuleapWikiFarm\\PreSharedKeySessionProvider": {
-			"class": "TuleapWikiFarm\\PreSharedKeySessionProvider",
-			"services": [ "MainConfig" ]
+			"factory": "TuleapWikiFarm\\PreSharedKeySessionProvider::factory"
 		}
 	},
 	"GrantPermissions": {
