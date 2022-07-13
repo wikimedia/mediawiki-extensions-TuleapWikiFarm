@@ -8,5 +8,8 @@ CREATE TABLE IF NOT EXISTS /*$wgDBprefix*/tuleap_instances (
     `ti_dbprefix` VARCHAR(255) NULL,
 	`ti_script_path` VARCHAR(255) NULL,
     `ti_data` BLOB NULL DEFAULT '',
-    PRIMARY KEY ( `ti_id` )
+    PRIMARY KEY ( `ti_id` ),
+    KEY idx_name ( `ti_name` ),
+    KEY idx_script_path ( `ti_script_path` ),
+    KEY idx_dbprefix ( `ti_dbprefix` )
 );
