@@ -4,5 +4,6 @@
 			"Ykhwong"
 		]
 	},
-	"action-tuleap-farm-manage": "Tuleap 내 위키 인스턴스를 관리할"
+	"action-tuleap-farm-manage": "Tuleap 내 위키 인스턴스를 관리할",
+	"right-tuleap-farm-manage": "Tuleap 내의 위키 인스턴스 관리"
 }
