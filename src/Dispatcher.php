@@ -178,6 +178,7 @@ class Dispatcher {
 	 */
 	private function setupEnvironment( $forInstance = true ) {
 		$this->globals['wgScriptPath'] = $this->instance->getScriptPath();
+		$this->globals['wgResourceBasePath'] = $this->instance->getScriptPath();
 		$this->globals['wgArticlePath'] = "{$this->instance->getScriptPath()}/$1";
 		$this->globals['wgUploadPath'] = "{$this->instance->getScriptPath()}/img_auth.php";
 		$this->globals['wgReadOnlyFile'] = "{$this->globals['wgUploadDirectory']}/lock_yBgMBwiR";
