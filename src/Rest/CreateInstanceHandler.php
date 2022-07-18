@@ -43,7 +43,9 @@ class CreateInstanceHandler extends AuthorizedHandler {
 
 		$body = $this->getValidatedBody();
 		$body['server'] = $this->config->get( 'Server' );
-		$dbPrefix = $body['dbprefix'] ?? '';
+		// `$body['dbprefix']` must be set for `install-instance` to work.
+		$body['dbprefix'] = $body['dbprefix'] ?? '';
+		$dbPrefix = $body['dbprefix'];
 		if ( $this->instanceManager->getUseSingleDb() && !$dbPrefix ) {
 			throw new HttpException(
 				'When configured to use single DB, param dbprefix must be set'
