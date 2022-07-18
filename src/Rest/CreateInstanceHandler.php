@@ -76,7 +76,7 @@ class CreateInstanceHandler extends AuthorizedHandler {
 				'class' => SetInstanceStatus::class,
 				'args' => [ InstanceEntity::STATE_READY ],
 				'services' => [ 'InstanceManager' ]
-			]
+			],
 		] );
 
 		$response = [];

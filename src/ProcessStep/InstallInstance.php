@@ -107,7 +107,6 @@ class InstallInstance implements IProcessStep {
 			'--instanceName', $instance->getName(),
 			'--adminuser', 'WikiSysop',
 			'--adminpass', $adminPass,
-			'--instanceDir', $this->manager->getDirectoryForInstance( $instance )
 		] );
 
 		$err = '';

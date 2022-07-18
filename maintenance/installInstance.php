@@ -8,6 +8,8 @@ require_once dirname( dirname( dirname( __DIR__ ) ) ) . '/maintenance/Maintenanc
 class InstallInstance extends Maintenance {
 	public function __construct() {
 		parent::__construct();
+
+		define( 'MEDIAWIKI_INSTALL', true );
 		$this->addOption( 'instanceName', '', true, true );
 		$this->addOption( 'dbserver', '', true, true );
 		$this->addOption( 'dbname', '', true, true );
@@ -19,7 +21,6 @@ class InstallInstance extends Maintenance {
 		$this->addOption( 'lang', '', true, true );
 		$this->addOption( 'adminuser', '', true, true );
 		$this->addOption( 'adminpass', '', true, true );
-		$this->addOption( 'instanceDir', '', true, true );
 	}
 
 	/**

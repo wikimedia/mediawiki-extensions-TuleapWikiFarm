@@ -71,8 +71,9 @@ class Dispatcher {
 	public function getFilesToRequire() {
 		$this->initInstance();
 		$this->defineConstants();
+		$this->includeTuleapFile();
 		if ( $this->isCliInstallerContext() ) {
-			return [];
+			return $this->filesToRequire;
 		}
 
 		if ( $this->isInstanceWikiCall() ) {
@@ -84,8 +85,6 @@ class Dispatcher {
 		} else {
 			$this->setupEnvironment( false );
 		}
-
-		$this->includeTuleapFile();
 
 		return $this->filesToRequire;
 	}
