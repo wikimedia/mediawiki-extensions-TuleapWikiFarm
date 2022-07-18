@@ -6,6 +6,18 @@ use Status;
 
 class InstanceCliInstaller extends \CliInstaller {
 	/**
+	 * @inheritDoc
+	 */
+	public function __construct( $siteName, $admin = null, array $options = [] ) {
+		parent::__construct( $siteName, $admin, $options );
+		// Overriding `findExtensionsByType` is not enough, apparently
+		$extensions = $this->findExtensionsByType();
+		if ( $extensions->isOK() ) {
+			$this->setVar( '_Extensions', array_keys( $extensions->value ) );
+		}
+	}
+
+	/**
 	 * Basically a copy of `CliInstaller::execute` but without the check for "$IP/LocalSettings.php"
 	 * @return Status
 	 */
@@ -51,6 +63,25 @@ class InstanceCliInstaller extends \CliInstaller {
 	public function showMessage( $msg, ...$params ) {
 		wfDebugLog( 'TuleapFarm', $msg );
 		wfDebugLog( 'TuleapFarm', var_export( $params, true ) );
+	}
+
+	/**
+	 * @param string $type
+	 * @param string $directory
+	 *
+	 * @return Status
+	 */
+	protected function findExtensionsByType( $type = 'extension', $directory = 'extensions' ) {
+		$status = parent::findExtensionsByType( $type, $directory );
+		if ( !$status->isOK() || $type !== 'extension' ) {
+			return $status;
+		}
+		$value = $status->getValue();
+		// On instance setup, we dont want to install farm management
+		if ( isset( $value['TuleapWikiFarm'] ) ) {
+			unset( $value['TuleapWikiFarm'] );
+		}
+		return Status::newGood( $value );
 	}
 
 	/**
