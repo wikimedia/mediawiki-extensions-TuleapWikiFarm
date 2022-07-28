@@ -61,7 +61,7 @@ class InstanceManagerTest extends TestCase {
 			return '';
 		} );
 		$manager = new InstanceManager( $storeMock, new HashConfig( [
-			'useSingleDb' => true,
+			'centralDb' => 'main_db',
 		] ), $configMock );
 		$instance = $manager->getNewInstance( 'Dummy', 101 );
 		$instance->setDatabasePrefix( 'foo_' );

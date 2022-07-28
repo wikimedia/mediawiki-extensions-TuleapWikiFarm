@@ -117,7 +117,7 @@
 		"TuleapFarmConfig": {
 			"value": {
 				"instanceDir": null,
-				"useSingleDb": false
+				"centralDb": null
 			}
 		}
 	},
