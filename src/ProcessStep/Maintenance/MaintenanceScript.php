@@ -107,18 +107,16 @@ abstract class MaintenanceScript implements IProcessStep {
 	 * @return Process
 	 */
 	private function runForAll() {
-		$process = new Process( array_merge(
+		return new Process( array_merge(
 			[
 				$this->getPhpExecutable(), $GLOBALS['IP'] .
 				'/extensions/TuleapWikiFarm/maintenance/runForAll.php',
 			],
 			[
 				'--script', $this->getFullScriptPath(),
-				'--args', '\"' . implode( ' ', $this->getFormattedArgs() ) . '\"'
+				'--args', implode( ' ', $this->getFormattedArgs() )
 			]
 		) );
-
-		return $process;
 	}
 
 	/**
