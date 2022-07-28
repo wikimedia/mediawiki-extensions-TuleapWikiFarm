@@ -29,9 +29,9 @@ class RegisterInstance extends Maintenance {
 		}
 
 		$dbPrefix = $this->getOption( 'dbprefix' );
-		if ( $manager->getUseSingleDb() && !$dbPrefix ) {
+		if ( $manager->getCentralDb() !== null && !$dbPrefix ) {
 			$this->fatalError(
-				'When configured to use single database, param dbprefix must be set'
+				'When configured to use central database, param dbprefix must be set'
 			);
 		}
 		if ( $manager->isProjectIdAssigned( $groupId, $dbPrefix ) ) {
