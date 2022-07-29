@@ -83,8 +83,9 @@ class InstanceManager {
 	 * @return false|string
 	 */
 	public function generateDbName( InstanceEntity $instance ) {
-		if ( $this->getUseSingleDb() ) {
-			return $this->mainConfig->get( 'DBname' );
+		$centralDbName = $this->getCentralDb();
+		if ( $centralDbName ) {
+			return $centralDbName;
 		}
 		return "plugin_mediawiki_{$instance->getId()}";
 	}
@@ -123,10 +124,12 @@ class InstanceManager {
 	}
 
 	/**
-	 * @return bool
+	 * Name of the central DB
+	 *
+	 * @return string|null if individual DBs should be used
 	 */
-	public function getUseSingleDb(): bool {
-		return $this->farmConfig->get( 'useSingleDb' );
+	public function getCentralDb(): ?string {
+		return $this->farmConfig->get( 'centralDb' );
 	}
 
 	/**
@@ -149,7 +152,7 @@ class InstanceManager {
 	public function isProjectIdAssigned( $projectId, $dbPrefix ) {
 		$idTaken = $this->getStore()->getInstanceById( $projectId ) instanceof InstanceEntity;
 
-		if ( !$idTaken && $this->getUseSingleDb() ) {
+		if ( !$idTaken && $this->getCentralDb() !== null ) {
 			return $this->getStore()->dbPrefixTaken( $dbPrefix );
 		}
 		return $idTaken;
