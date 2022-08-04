@@ -108,6 +108,12 @@
 			"path": "/tuleap/instance/{name}",
 			"class": "TuleapWikiFarm\\Rest\\DeleteInstanceHandler",
 			"services": [ "InstanceManager", "MainConfig" ]
+		},
+		{
+			"method": "POST",
+			"path": "/tuleap/instance/register/{name}",
+			"class": "TuleapWikiFarm\\Rest\\RegisterInstanceHandler",
+			"services": [ "InstanceManager" ]
 		}
 	],
 	"config": {

@@ -112,6 +112,40 @@ paths:
                     content: {}
             security:
                 - farm-management-auth: []
+    /instance/register/{name}:
+        post:
+            tags:
+                - instance
+            summary: Register empty instance
+            description: This is used only for migrating existing instances
+            operationId: registerInstance
+            parameters:
+                - name: name
+                  in: path
+                  description: Instance name
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                description: Instance data
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterConfiguration'
+                required: true
+            responses:
+                200:
+                    description: Details of the registered instance
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/InstanceDetails'
+                500:
+                    description: Missing data
+                    content: {}
+            security:
+                - farm-management-auth: []
+            x-codegen-request-body-name: body
     /instance/rename/{name}/{newname}:
         post:
             tags:
@@ -274,6 +308,18 @@ components:
                     items:
                         type: string
                         example: any arbitrary data to be available on instance calls
+        RegisterConfiguration:
+            required:
+                - project_id
+                - project_name
+            type: object
+            properties:
+                project_id:
+                    type: integer
+                project_name:
+                    type: string
+                dbprefix:
+                    type: string
         ProcessResponse:
             type: object
             properties:
@@ -292,6 +338,37 @@ components:
                         - ready
                         - maintenance
                         - initializing
+        InstanceDetails:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: 'my_project'
+                directory:
+                    type: string
+                    example: /101
+                database:
+                    type: string
+                    example: plugin_mediawiki_101
+                dbPrefix:
+                    type: string
+                    example: 'mw'
+                scriptPath:
+                    type: string
+                    example: '/mediawiki/my_project'
+                created:
+                    type: string
+                    example: 20220804082758
+                status:
+                    type: string
+                    example: maintenance
+                data:
+                    type: object
+                    properties:
+                        project_id:
+                            type: string
+                            example: 101
+
         SuccessResponse:
             type: object
             properties:
