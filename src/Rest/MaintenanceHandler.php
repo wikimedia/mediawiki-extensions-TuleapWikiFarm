@@ -55,7 +55,12 @@ class MaintenanceHandler extends AuthorizedHandler {
 				throw new HttpException( 'Invalid instance name: ' . $instanceName, 422 );
 			}
 			$instance = $this->instanceManager->getStore()->getInstanceByName( $instanceName );
-			if ( !$instance || $instance->getStatus() !== InstanceEntity::STATE_READY ) {
+			if (
+				!$instance ||
+				!in_array( $instance->getStatus(), [
+					InstanceEntity::STATE_MIGRATION, InstanceEntity::STATE_READY
+				] )
+			) {
 				throw new HttpException( 'Instance not available or not ready', 400 );
 			}
 			array_unshift( $spec['args'], $instance->getId() );
