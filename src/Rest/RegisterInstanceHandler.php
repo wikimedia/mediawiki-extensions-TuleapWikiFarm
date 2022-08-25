@@ -52,7 +52,7 @@ class RegisterInstanceHandler extends AuthorizedHandler {
 		$entity->setDirectory( $this->instanceManager->generateInstanceDirectoryName( $entity ) );
 		$entity->setScriptPath( $this->instanceManager->generateScriptPath( $entity ) );
 		$entity->setDatabaseName( $this->instanceManager->generateDbName( $entity ) );
-		$entity->setStatus( InstanceEntity::STATE_MAINTENANCE );
+		$entity->setStatus( InstanceEntity::STATE_MIGRATION );
 		if ( !$this->instanceManager->getStore()->storeEntity( $entity ) ) {
 			throw new HttpException( "Could not register instance" );
 		}

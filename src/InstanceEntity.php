@@ -9,6 +9,7 @@ class InstanceEntity implements \JsonSerializable {
 	public const STATE_READY = 'ready';
 	public const STATE_MAINTENANCE = 'maintenance';
 	public const STATE_SUSPENDED = 'suspended';
+	public const STATE_MIGRATION = 'migration';
 
 	private $dirty = false;
 	/** @var int */
@@ -143,7 +144,7 @@ class InstanceEntity implements \JsonSerializable {
 	public function setStatus( $status ) {
 		$allowedStatus = [
 			static::STATE_INITIALIZING, static::STATE_MAINTENANCE,
-			static::STATE_READY, static::STATE_SUSPENDED
+			static::STATE_READY, static::STATE_SUSPENDED, static::STATE_MIGRATION
 		];
 		if ( !in_array( $status, $allowedStatus ) ) {
 			return;

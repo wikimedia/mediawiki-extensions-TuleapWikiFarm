@@ -45,7 +45,7 @@ class RegisterInstance extends Maintenance {
 		$entity->setDirectory( $manager->generateInstanceDirectoryName( $entity ) );
 		$entity->setScriptPath( $manager->generateScriptPath( $entity ) );
 		$entity->setDatabaseName( $manager->generateDbName( $entity ) );
-		$entity->setStatus( \TuleapWikiFarm\InstanceEntity::STATE_READY );
+		$entity->setStatus( \TuleapWikiFarm\InstanceEntity::STATE_MIGRATION );
 		if ( !$manager->getStore()->storeEntity( $entity ) ) {
 			$this->fatalError( "Could not register instance" );
 		}
