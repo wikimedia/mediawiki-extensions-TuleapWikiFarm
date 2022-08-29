@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly"
+		]
+	},
+	"tuleapwikifarm-desc": "Tuleap 的農場管理",
+	"action-tuleap-farm-manage": "在 Tuleap 來管理 wiki 實例",
+	"right-tuleap-farm-manage": "在 Tuleap 來管理 wiki 實例"
+}
