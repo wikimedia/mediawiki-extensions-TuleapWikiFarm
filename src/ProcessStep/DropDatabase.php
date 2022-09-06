@@ -34,6 +34,16 @@ class DropDatabase implements IProcessStep {
 		$instance = $this->manager->getStore()->getInstanceById( $this->id );
 		$dbName = $instance->getDatabaseName();
 
+		if ( $this->manager->getCentralDb() !== null ) {
+			return [
+				'id' => $instance->getId(),
+				'warning' => 'Central DB is used, cannot drop'
+			];
+		}
+		if ( $dbName === $this->dbConnection['main_db'] ) {
+			// Probably unnecessary, but cannot be too careful when dropping databases
+			throw new Exception( 'Instance database matches main database name, cannot drop' );
+		}
 		$db = \Database::factory( $this->dbConnection['type'], [
 			'host' => $this->dbConnection['host'],
 			'user' => $this->dbConnection['user'],

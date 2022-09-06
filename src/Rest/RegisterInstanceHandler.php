@@ -56,7 +56,7 @@ class RegisterInstanceHandler extends AuthorizedHandler {
 		if ( !$this->instanceManager->getStore()->storeEntity( $entity ) ) {
 			throw new HttpException( "Could not register instance" );
 		}
-		return $this->getResponseFactory()->createJson( $entity->jsonSerialize() );
+		return $this->returnJson( $entity->jsonSerialize() );
 	}
 
 	/**
