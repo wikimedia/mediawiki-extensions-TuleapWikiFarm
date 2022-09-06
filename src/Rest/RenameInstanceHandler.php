@@ -43,7 +43,9 @@ class RenameInstanceHandler extends AuthorizedHandler {
 
 		$success = $this->instanceManager->getStore()->storeEntity( $entity );
 
-		return $this->getResponseFactory()->createJson( [ 'status' => $success ] );
+		return $this->returnJson( [
+			'success' => $success,
+		], $success ? 200 : 500 );
 	}
 
 	/**

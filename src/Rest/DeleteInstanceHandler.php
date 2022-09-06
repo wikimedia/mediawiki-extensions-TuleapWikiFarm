@@ -35,6 +35,7 @@ class DeleteInstanceHandler extends InstanceHandler {
 			'type' => $this->config->get( 'DBtype' ),
 			'host' => $this->config->get( 'DBserver' ),
 			'user' => $this->config->get( 'DBuser' ),
+			'main_db' => $this->config->get( 'DBname' ),
 			'password' => $this->config->get( 'DBpassword' ),
 		];
 		$process = new StepProcess( [
@@ -55,19 +56,6 @@ class DeleteInstanceHandler extends InstanceHandler {
 			]
 		] );
 
-		$response = [];
-		try {
-			$data = $process->process();
-			$response['status'] = 'success';
-			$response['output'] = $data;
-		} catch ( \Exception $ex ) {
-			$response['status'] = 'error';
-			$response['error'] = [
-				'code' => $ex->getCode(),
-				'message' => $ex->getMessage(),
-				'trace' => $ex->getTraceAsString(),
-			];
-		}
-		return $this->getResponseFactory()->createJson( $response );
+		return $this->runProcess( $process );
 	}
 }

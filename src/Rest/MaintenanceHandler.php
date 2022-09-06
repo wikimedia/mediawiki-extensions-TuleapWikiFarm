@@ -73,20 +73,7 @@ class MaintenanceHandler extends AuthorizedHandler {
 			$script => $spec,
 		] );
 
-		$response = [];
-		try {
-			$data = $process->process( $timeout );
-			$response['status'] = 'success';
-			$response['output'] = $data;
-		} catch ( \Exception $ex ) {
-			$response['status'] = 'error';
-			$response['error'] = [
-				'code' => $ex->getCode(),
-				'message' => $ex->getMessage(),
-				'trace' => $ex->getTraceAsString(),
-			];
-		}
-		return $this->getResponseFactory()->createJson( $response );
+		return $this->runProcess( $process, $timeout );
 	}
 
 	/**

@@ -31,6 +31,6 @@ class UnregisterInstance implements IProcessStep {
 			throw new Exception( 'Failed to delete instance entry' );
 		}
 
-		return [];
+		return $data;
 	}
 }

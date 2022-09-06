@@ -17,7 +17,6 @@ class InstanceStatusHandler extends InstanceHandler {
 			);
 		}
 		$instance = $this->getInstance();
-
-		return $this->getResponseFactory()->createJson( $instance->jsonSerialize() );
+		return $this->returnJson( $instance->jsonSerialize() );
 	}
 }

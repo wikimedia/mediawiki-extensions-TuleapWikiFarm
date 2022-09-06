@@ -34,8 +34,8 @@ class SetInstanceStatusHandler extends InstanceHandler {
 
 		$res = $this->getManager()->setInstanceStatus( $instance, $this->status );
 
-		return $this->getResponseFactory()->createJson( [
-			'success' => $res
-		] );
+		return $this->returnJson( [
+			'success' => $res,
+		], $res ? 200 : 500 );
 	}
 }
