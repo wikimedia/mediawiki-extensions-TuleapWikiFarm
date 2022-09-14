@@ -70,7 +70,7 @@
 			"method": "PUT",
 			"path": "/tuleap/instance/{name}",
 			"class": "TuleapWikiFarm\\Rest\\CreateInstanceHandler",
-			"services": [ "InstanceManager", "MainConfig" ]
+			"services": [ "InstanceManager", "MainConfig", "LanguageNameUtils" ]
 		},
 		{
 			"method": "POST",
@@ -113,7 +113,7 @@
 			"method": "POST",
 			"path": "/tuleap/instance/register/{name}",
 			"class": "TuleapWikiFarm\\Rest\\RegisterInstanceHandler",
-			"services": [ "InstanceManager" ]
+			"services": [ "InstanceManager", "LanguageNameUtils" ]
 		}
 	],
 	"config": {

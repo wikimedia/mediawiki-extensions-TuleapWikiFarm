@@ -3,6 +3,7 @@
 namespace TuleapWikiFarm\Rest;
 
 use Config;
+use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use TuleapWikiFarm\InstanceEntity;
@@ -19,16 +20,20 @@ class CreateInstanceHandler extends AuthorizedHandler {
 	private $instanceManager;
 	/** @var Config */
 	private $config;
+	/** @var LanguageNameUtils */
+	private $languageNameUtils;
 
 	/**
 	 * @param InstanceManager $instanceManager
 	 * @param Config $config
+	 * @param LanguageNameUtils $languageNameUtils
 	 */
 	public function __construct(
-		InstanceManager $instanceManager, Config $config
+		InstanceManager $instanceManager, Config $config, LanguageNameUtils $languageNameUtils
 	) {
 		$this->instanceManager = $instanceManager;
 		$this->config = $config;
+		$this->languageNameUtils = $languageNameUtils;
 	}
 
 	/**
@@ -56,10 +61,16 @@ class CreateInstanceHandler extends AuthorizedHandler {
 			throw new HttpException( 'Instance for this project already exists', 422 );
 		}
 
+		$registerParams = [ $params['name'], $body['project_id'], $dbPrefix ];
+		$customLang = $this->getCustomLang( $body );
+		if ( $customLang ) {
+			$body['lang'] = $customLang;
+			$registerParams[] = $body['lang'];
+		}
 		$process = new StepProcess( [
 			'register-instance' => [
 				'class' => RegisterInstance::class,
-				'args' => [ $params['name'], $body['project_id'], $dbPrefix ],
+				'args' => $registerParams,
 				'services' => [ 'InstanceManager' ]
 			],
 			'create-vault' => [
@@ -133,5 +144,25 @@ class CreateInstanceHandler extends AuthorizedHandler {
 				ParamValidator::PARAM_TYPE => 'string',
 			]
 		];
+	}
+
+	/**
+	 * @param array $body
+	 *
+	 * @return string|null
+	 */
+	private function getCustomLang( array $body ): ?string {
+		if ( !isset( $body['lang'] ) ) {
+			return null;
+		}
+		$lang = strtolower( $body['lang'] );
+		if ( $lang === $this->config->get( 'LanguageCode' ) ) {
+			return null;
+		}
+		if ( $this->languageNameUtils->isValidCode( $lang ) ) {
+			return $lang;
+		}
+
+		return null;
 	}
 }

@@ -192,6 +192,10 @@ class Dispatcher {
 			$this->globals['wgDBname'] = $this->instance->getDatabaseName();
 			$this->globals['wgDBprefix'] = $this->instance->getDatabasePrefix();
 			$this->globals['wgTuleapData'] = $this->instance->getData();
+			$lang = $this->instance->getDataItem( 'lang' );
+			if ( $lang ) {
+				$this->globals['wgLanguageCode'] = $lang;
+			}
 			define( 'WIKI_FARMING', true );
 		}
 	}
