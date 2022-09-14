@@ -15,18 +15,22 @@ class RegisterInstance implements IProcessStep {
 	private $projectId;
 	/** @var string */
 	private $dbPrefix;
+	/** @var null */
+	private $lang;
 
 	/**
 	 * @param InstanceManager $manager
 	 * @param string $name
 	 * @param int $projectId
 	 * @param string $dbPrefix
+	 * @param null $lang
 	 */
-	public function __construct( InstanceManager $manager, $name, $projectId, $dbPrefix ) {
+	public function __construct( InstanceManager $manager, $name, $projectId, $dbPrefix, $lang = null ) {
 		$this->manager = $manager;
 		$this->name = $name;
 		$this->projectId = $projectId;
 		$this->dbPrefix = $dbPrefix;
+		$this->lang = $lang;
 	}
 
 	/**
@@ -38,6 +42,9 @@ class RegisterInstance implements IProcessStep {
 		$entity = $this->manager->getNewInstance( $this->name, $this->projectId );
 		if ( $this->dbPrefix ) {
 			$entity->setDatabasePrefix( $this->dbPrefix );
+		}
+		if ( $this->lang !== null ) {
+			$entity->setDataItem( 'lang', $this->lang );
 		}
 
 		if ( !$this->manager->getStore()->storeEntity( $entity ) ) {

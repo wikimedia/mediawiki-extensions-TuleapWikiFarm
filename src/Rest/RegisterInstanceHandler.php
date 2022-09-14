@@ -2,6 +2,7 @@
 
 namespace TuleapWikiFarm\Rest;
 
+use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Rest\HttpException;
 use MediaWiki\Rest\Validator\JsonBodyValidator;
 use TuleapWikiFarm\InstanceEntity;
@@ -11,14 +12,18 @@ use Wikimedia\ParamValidator\ParamValidator;
 class RegisterInstanceHandler extends AuthorizedHandler {
 	/** @var InstanceManager */
 	protected $instanceManager;
+	/** @var LanguageNameUtils */
+	private $languageNameUtils;
 
 	/**
 	 * @param InstanceManager $instanceManager
+	 * @param LanguageNameUtils $languageNameUtils
 	 */
 	public function __construct(
-		InstanceManager $instanceManager
+		InstanceManager $instanceManager, LanguageNameUtils $languageNameUtils
 	) {
 		$this->instanceManager = $instanceManager;
+		$this->languageNameUtils = $languageNameUtils;
 	}
 
 	/**
@@ -48,6 +53,9 @@ class RegisterInstanceHandler extends AuthorizedHandler {
 		$entity = $this->instanceManager->getNewInstance( $name, $projectId );
 		if ( $dbPrefix ) {
 			$entity->setDatabasePrefix( $dbPrefix );
+		}
+		if ( $body['lang'] !== '' && $this->languageNameUtils->isValidCode( $body['lang'] ) ) {
+			$entity->setDataItem( 'lang', $body['lang'] );
 		}
 		$entity->setDirectory( $this->instanceManager->generateInstanceDirectoryName( $entity ) );
 		$entity->setScriptPath( $this->instanceManager->generateScriptPath( $entity ) );
@@ -80,7 +88,13 @@ class RegisterInstanceHandler extends AuthorizedHandler {
 					ParamValidator::PARAM_REQUIRED => false,
 					ParamValidator::PARAM_TYPE => 'string',
 					ParamValidator::PARAM_DEFAULT => ''
-				]
+				],
+				'lang' => [
+					self::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_REQUIRED => false,
+					ParamValidator::PARAM_TYPE => 'string',
+					ParamValidator::PARAM_DEFAULT => '',
+				],
 			] );
 		}
 		throw new HttpException( 'Content-Type header must be application/json' );
