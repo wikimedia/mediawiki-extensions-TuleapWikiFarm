@@ -16,4 +16,11 @@ class Update extends MaintenanceScript {
 	protected function getScriptPath(): string {
 		return 'maintenance/update.php';
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function shouldSetMaintenanceMode(): bool {
+		return true;
+	}
 }
