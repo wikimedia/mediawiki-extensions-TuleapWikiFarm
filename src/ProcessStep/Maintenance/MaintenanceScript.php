@@ -50,14 +50,16 @@ abstract class MaintenanceScript implements IProcessStep {
 
 		if ( $this->instanceId === -1 ) {
 			$process = $this->runForAll();
+			$process->run();
 		} else {
 			$instance = $this->manager->getStore()->getInstanceById( $this->instanceId );
-			if ( !$instance ) {
-				throw new Exception( 'Invalid instance or cannot be retrieved' );
-			}
 			$process = $this->runForInstance( $instance );
+			if ( $this->shouldSetMaintenanceMode() ) {
+				$this->setMaintenanceMode( $instance );
+			}
+			$process->run();
+			$this->setReady( $instance );
 		}
-		$process->run();
 
 		if ( !$process->isSuccessful() ) {
 			throw new Exception( $process->getErrorOutput() );
@@ -77,6 +79,28 @@ abstract class MaintenanceScript implements IProcessStep {
 			'stderr' => $process->getErrorOutput(),
 			'warnings' => $data['warnings'] ?? [],
 		];
+	}
+
+	/**
+	 * @param InstanceEntity $instance
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	public function setMaintenanceMode( InstanceEntity $instance ) {
+		$instance->setStatus( InstanceEntity::STATE_MAINTENANCE );
+		$this->manager->getStore()->storeEntity( $instance );
+	}
+
+	/**
+	 * @param InstanceEntity $instance
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	private function setReady( InstanceEntity $instance ) {
+		$instance->setStatus( InstanceEntity::STATE_READY );
+		$this->manager->getStore()->storeEntity( $instance );
 	}
 
 	/**
@@ -115,7 +139,8 @@ abstract class MaintenanceScript implements IProcessStep {
 			[
 				'--script', $this->getFullScriptPath(),
 				'--args', implode( ' ', $this->getFormattedArgs() )
-			]
+			],
+			$this->shouldSetMaintenanceMode() ? [ '--set-maintenance' ] : []
 		) );
 	}
 
@@ -142,5 +167,13 @@ abstract class MaintenanceScript implements IProcessStep {
 	 */
 	protected function modifyProcess( Process $process ) {
 		// STUB
+	}
+
+	/**
+	 * Whether the script should set the maintenance mode on the instance
+	 * @return bool
+	 */
+	protected function shouldSetMaintenanceMode(): bool {
+		return false;
 	}
 }
