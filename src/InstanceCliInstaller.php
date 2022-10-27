@@ -2,7 +2,13 @@
 
 namespace TuleapWikiFarm;
 
+use DatabaseInstaller;
+use Exception;
 use Status;
+use Title;
+use User;
+use WikiPage;
+use WikitextContent;
 
 class InstanceCliInstaller extends \CliInstaller {
 	/**
@@ -101,5 +107,48 @@ class InstanceCliInstaller extends \CliInstaller {
 		if ( !$status->isGood() ) {
 			wfDebugLog( 'TuleapFarm', $status->getMessage()->inLanguage( 'en' )->text() );
 		}
+	}
+
+	/**
+	 * Insert Main Page with default content.
+	 *
+	 * @param DatabaseInstaller $installer
+	 * @return Status
+	 */
+	protected function createMainpage( DatabaseInstaller $installer ) {
+		$status = Status::newGood();
+		$title = Title::newMainPage();
+		if ( $title->exists() ) {
+			$status->warning( 'config-install-mainpage-exists' );
+			return $status;
+		}
+		try {
+			$path = dirname( __DIR__ ) . '/content/mainpage.html';
+			echo "$path\n";
+
+			$rawContent = file_get_contents( $path );
+			$processedContent = preg_replace_callback(
+				'#\{\{int:(.*?)\}\}#si',
+				static function ( $matches ) {
+					return wfMessage( $matches[1] )->inContentLanguage()->text();
+				},
+				$rawContent
+			);
+			$content = new WikitextContent( $processedContent );
+
+			$page = WikiPage::factory( $title );
+			$status = $page->doEditContent(
+				$content,
+				'',
+				EDIT_NEW,
+				false,
+				User::newSystemUser( 'Tuleap default' )
+			);
+		} catch ( Exception $e ) {
+			// using raw, because $wgShowExceptionDetails can not be set yet
+			$status->fatal( 'config-install-mainpage-failed', $e->getMessage() );
+		}
+
+		return $status;
 	}
 }
