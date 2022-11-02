@@ -1,9 +1,12 @@
-= TuleapWikiFarm 1.0.2 =
+= TuleapWikiFarm 1.1.0 =
 
-This is a security and maintenance release of the TuleapWikiFarm 1.0 branch.
+This is a minor level release of the TuleapWikiFarm 1.0 branch.
+
+It introduces a new CLI installer that supports installation on databases that require TLS.
 
 === Changes since TuleapWikiFarm 1.0.1 ===
 * Localisation updates.
+* (Tuleap#27189) Add SSL enabled installer
 
 = TuleapWikiFarm 1.0.1 =
 

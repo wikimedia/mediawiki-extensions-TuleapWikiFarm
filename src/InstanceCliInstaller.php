@@ -10,7 +10,7 @@ use User;
 use WikiPage;
 use WikitextContent;
 
-class InstanceCliInstaller extends \CliInstaller {
+class InstanceCliInstaller extends FarmCliInstaller {
 	/**
 	 * @inheritDoc
 	 */

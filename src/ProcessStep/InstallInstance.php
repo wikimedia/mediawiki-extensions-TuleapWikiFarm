@@ -92,8 +92,7 @@ class InstallInstance implements IProcessStep {
 		$dbName = $this->manager->generateDbName( $instance );
 		$adminPass = bin2hex( random_bytes( 16 ) );
 
-		// We must run this in isolation, as to not override globals, services...
-		$process = new Process( [
+		$processArgs = [
 			$this->config->get( 'PhpCli' ),
 			$GLOBALS['IP'] . '/extensions/TuleapWikiFarm/maintenance/installInstance.php',
 			'--scriptpath', $scriptPath,
@@ -107,7 +106,13 @@ class InstallInstance implements IProcessStep {
 			'--instanceName', $instance->getName(),
 			'--adminuser', 'WikiSysop',
 			'--adminpass', $adminPass,
-		] );
+		];
+		if ( $this->config->get( 'DBssl' ) ) {
+			$processArgs[] = '--dbssl';
+		}
+
+		// We must run this in isolation, as to not override globals, services...
+		$process = new Process( $processArgs );
 
 		$err = '';
 		$process->run( static function ( $type, $buffer ) use ( &$err ) {
