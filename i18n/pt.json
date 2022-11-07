@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hamilton Abreu"
+		]
+	},
+	"tuleapwikifarm-desc": "Administração de ''sites'' de alojamento via Tuleap",
+	"action-tuleap-farm-manage": "administrar instâncias de wikis dentro do Tuleap",
+	"right-tuleap-farm-manage": "Administrar instâncias de wikis dentro do Tuleap"
+}
