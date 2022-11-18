@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"tuleapwikifarm-desc": "Gestion de fermas sur Tuleap",
+	"action-tuleap-farm-manage": "gerer instantias de wiki intra Tuleap",
+	"right-tuleap-farm-manage": "Gerer instantias de wiki intra Tuleap"
+}
