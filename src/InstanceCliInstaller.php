@@ -118,12 +118,18 @@ class InstanceCliInstaller extends FarmCliInstaller {
 	protected function createMainpage( DatabaseInstaller $installer ) {
 		$status = Status::newGood();
 		$title = Title::newMainPage();
+		$lang = $this->getVar( 'wgLanguageCode' );
 		if ( $title->exists() ) {
 			$status->warning( 'config-install-mainpage-exists' );
 			return $status;
 		}
 		try {
-			$path = dirname( __DIR__ ) . '/content/mainpage.html';
+			$basePath = '/etc/tuleap/plugins/mediawiki_standalone/additional-packages/mediawiki-content';
+			$fallBackPath = "$basePath/en/mainpage.html";
+			$path = "$basePath/$lang/mainpage.html";
+			if ( !file_exists( $path ) ) {
+				$path = $fallBackPath;
+			}
 			echo "$path\n";
 
 			$rawContent = file_get_contents( $path );
