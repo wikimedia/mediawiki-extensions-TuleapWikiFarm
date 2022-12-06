@@ -5,7 +5,6 @@ use TuleapWikiFarm\InstanceCliInstaller;
 
 require_once dirname( dirname( dirname( __DIR__ ) ) ) . '/maintenance/Maintenance.php';
 
-define( 'MW_CONFIG_CALLBACK', 'Installer::overrideConfig' );
 define( 'MEDIAWIKI_INSTALL', true );
 
 class InstallInstance extends Maintenance {
