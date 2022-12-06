@@ -4,6 +4,9 @@ This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
 
 === Changes since TuleapWikiFarm 1.1.0 ===
 * Localisation updates.
+* Get content of Main_Page from `tuleap/plugins/mediawiki_standalone`
+* Remove `Installer::overrideConfig` from `instanceInstaller`
+
 
 = TuleapWikiFarm 1.1.0 =
 
