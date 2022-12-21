@@ -5,39 +5,18 @@ use MediaWiki\Session\SessionManager;
 
 require_once dirname( dirname( dirname( __DIR__ ) ) ) . '/maintenance/Maintenance.php';
 
-class TerminateAllSessions extends Maintenance {
+class TerminateUserSession extends Maintenance {
 	private $batchSize = 1000;
 
 	public function __construct() {
 		parent::__construct();
-		$this->addOption( 'user', 'User to invalidate', false, true, 'u' );
+		$this->addOption( 'user', 'User to invalidate', true, true, 'u' );
 	}
 
 	public function execute() {
 		$user = $this->getOption( 'user' );
 		$userFactory = MediaWikiServices::getInstance()->getUserFactory();
-		if ( $user ) {
-			$this->invalidateForUser( $userFactory->newFromName( $user ) );
-			return;
-		}
-
-		$lbFactory = MediaWikiServices::getInstance()->getDBLoadBalancerFactory();
-		$users = $lbFactory->getMainLB()->getConnection( DB_REPLICA )->select(
-			'user',
-			[ 'user_name' ],
-			[],
-			__METHOD__
-		);
-
-		$i = 0;
-		foreach ( $users as $userRow ) {
-			$i++;
-			$this->invalidateForUser( $userFactory->newFromName( $userRow->user_name ) );
-
-			if ( $i % $this->batchSize ) {
-				$lbFactory->waitForReplication();
-			}
-		}
+		$this->invalidateForUser( $userFactory->newFromName( $user ) );
 	}
 
 	/**
@@ -63,5 +42,5 @@ class TerminateAllSessions extends Maintenance {
 
 }
 
-$maintClass = TerminateAllSessions::class;
+$maintClass = TerminateUserSession::class;
 require_once RUN_MAINTENANCE_IF_MAIN;

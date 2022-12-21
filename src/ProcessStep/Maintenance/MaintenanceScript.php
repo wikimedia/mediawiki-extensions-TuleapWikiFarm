@@ -11,11 +11,11 @@ use TuleapWikiFarm\IProcessStep;
 
 abstract class MaintenanceScript implements IProcessStep {
 	/** @var InstanceManager */
-	private $manager;
+	protected $manager;
 	/** @var Config */
 	protected $config;
 	/** @var int */
-	private $instanceId;
+	protected $instanceId;
 	/** @var array */
 	protected $args;
 	/** @var bool */
