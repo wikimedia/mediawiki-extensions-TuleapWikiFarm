@@ -242,6 +242,6 @@ class Dispatcher {
 	 * @return bool
 	 */
 	private function isMaintenance() {
-		return defined( 'DO_MAINTENANCE' ) && is_file( RUN_MAINTENANCE_IF_MAIN );
+		return defined( 'RUN_MAINTENANCE_IF_MAIN' ) && is_file( RUN_MAINTENANCE_IF_MAIN );
 	}
 }
