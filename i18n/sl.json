@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"tuleapwikifarm-desc": "Upravljanje farme s Tuleapom",
+	"action-tuleap-farm-manage": "upravljanje instanc vikija v Tuleapu",
+	"right-tuleap-farm-manage": "Upravljanje instanc vikija v Tuleapu"
+}
