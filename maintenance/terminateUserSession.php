@@ -6,17 +6,29 @@ use MediaWiki\Session\SessionManager;
 require_once dirname( dirname( dirname( __DIR__ ) ) ) . '/maintenance/Maintenance.php';
 
 class TerminateUserSession extends Maintenance {
-	private $batchSize = 1000;
-
 	public function __construct() {
 		parent::__construct();
-		$this->addOption( 'user', 'User to invalidate', true, true, 'u' );
+		$this->addOption( 'user', 'User to invalidate', false, true, 'u' );
 	}
 
 	public function execute() {
 		$user = $this->getOption( 'user' );
-		$userFactory = MediaWikiServices::getInstance()->getUserFactory();
-		$this->invalidateForUser( $userFactory->newFromName( $user ) );
+		if ( $user ) {
+			$userFactory = MediaWikiServices::getInstance()->getUserFactory();
+			$this->invalidateForUser( $userFactory->newFromName( $user ) );
+			return;
+		}
+		$db = MediaWikiServices::getInstance()->getDBLoadBalancer()->getConnection( DB_PRIMARY );
+		$res = $db->delete(
+			'objectcache',
+			[ "keyname LIKE '%MWSession%'" ],
+			__METHOD__
+		);
+		if ( $res ) {
+			$this->output( "Deleted all sessions\n" );
+		} else {
+			$this->output( "Failed to delete sessions\n" );
+		}
 	}
 
 	/**
@@ -39,7 +51,6 @@ class TerminateUserSession extends Maintenance {
 				. str_replace( [ "\r", "\n" ], ' ', $ex->getMessage() ) . "\n" );
 		}
 	}
-
 }
 
 $maintClass = TerminateUserSession::class;
