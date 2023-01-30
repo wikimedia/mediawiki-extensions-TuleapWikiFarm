@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Brettchenweber"
+			"Brettchenweber",
+			"Justman10000"
 		]
 	},
-	"tuleapwikifarm-desc": "Wikifarm-Verwaltung über Tuleap"
+	"tuleapwikifarm-desc": "Wikifarm-Verwaltung über Tuleap",
+	"action-tuleap-farm-manage": "Wiki-Instanzen innerhalb von Tuleap verwalten",
+	"right-tuleap-farm-manage": "Verwalte Wiki-Instanzen innerhalb von Tuleap"
 }
