@@ -189,9 +189,6 @@ class Dispatcher {
 			$this->globals['wgSitename'] = $this->instance->getName();
 			$this->globals['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
 			$this->globals['wgTuleapProjectId'] = $this->instance->getId();
-			$this->globals['wgAuthenticationTokenVersion'] = $this->instance->getDataItem(
-				'auth_token_version', null
-			);
 			$this->globals['wgDBname'] = $this->instance->getDatabaseName();
 			$this->globals['wgDBprefix'] = $this->instance->getDatabasePrefix();
 			$this->globals['wgTuleapData'] = $this->instance->getData();
