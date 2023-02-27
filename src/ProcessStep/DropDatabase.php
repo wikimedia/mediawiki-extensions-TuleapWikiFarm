@@ -5,6 +5,7 @@ namespace TuleapWikiFarm\ProcessStep;
 use Exception;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\IProcessStep;
+use Wikimedia\Rdbms\DatabaseFactory;
 
 class DropDatabase implements IProcessStep {
 	/** @var InstanceManager */
@@ -44,7 +45,7 @@ class DropDatabase implements IProcessStep {
 			// Probably unnecessary, but cannot be too careful when dropping databases
 			throw new Exception( 'Instance database matches main database name, cannot drop' );
 		}
-		$db = \Database::factory( $this->dbConnection['type'], [
+		$db = ( new DatabaseFactory() )->create( $this->dbConnection['type'], [
 			'host' => $this->dbConnection['host'],
 			'user' => $this->dbConnection['user'],
 			'password' => $this->dbConnection['password'],
