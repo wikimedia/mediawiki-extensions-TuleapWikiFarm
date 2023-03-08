@@ -2,11 +2,14 @@
 
 namespace TuleapWikiFarm;
 
+use CommentStoreComment;
 use DatabaseInstaller;
 use Exception;
+use MediaWiki\Revision\SlotRecord;
 use Status;
 use Title;
 use User;
+use Wikimedia\Rdbms\DBUnexpectedError;
 use WikiPage;
 use WikitextContent;
 
@@ -143,13 +146,12 @@ class InstanceCliInstaller extends FarmCliInstaller {
 			$content = new WikitextContent( $processedContent );
 
 			$page = WikiPage::factory( $title );
-			$status = $page->doEditContent(
-				$content,
-				'',
-				EDIT_NEW,
-				false,
-				User::newSystemUser( 'Tuleap default' )
-			);
+			$updater = $page->newPageUpdater( User::newSystemUser( 'Tuleap default' ) );
+			$updater->setContent( SlotRecord::MAIN, $content );
+			$updater->saveRevision( CommentStoreComment::newUnsavedComment( '' ), EDIT_NEW );
+			$status = $updater->getStatus();
+		} catch ( DBUnexpectedError $e ) {
+			// Ignore, error on deferred updates
 		} catch ( Exception $e ) {
 			// using raw, because $wgShowExceptionDetails can not be set yet
 			$status->fatal( 'config-install-mainpage-failed', $e->getMessage() );

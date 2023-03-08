@@ -1,6 +1,14 @@
+= TuleapWikiFarm 1.1.4 =
+
+This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
+
 = TuleapWikiFarm 1.1.3 =
 
 This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
+
+=== Changes since TuleapWikiFarm 1.1.2 ===
+
+* (Tuleap#30730) Fix error on creating a new instance
 
 === Changes since TuleapWikiFarm 1.1.2 ===
 * Localisation updates.
