@@ -115,9 +115,10 @@ class Dispatcher {
 			}
 			// We need to reset let the maintenance script reload the arguments, as we now have
 			// removed the "--sfr" flag, which would lead to an "Unexpected option" error
-			/** @var Maintenance */
-			$this->globals['maintenance']->clearParamsAndArgs();
-			$this->globals['maintenance']->loadParamsAndArgs();
+			// Since '--sfr' is already removed from $argv in the extractor, just re-init the runner
+			/** @var MaintenanceRunner */
+			$runner = $this->globals['runner' ];
+			$runner->init( $this->globals['maintClass'] );
 		} else {
 			$this->trySetFromOauthCall();
 			$name = isset( $this->request['sfr'] ) ? $this->request['sfr'] : 'w';
