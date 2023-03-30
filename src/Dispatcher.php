@@ -187,6 +187,7 @@ class Dispatcher {
 			$this->globals['wgCacheDirectory'] = "{$this->instanceVaultPathname}/cache";
 			$this->globals['wgSitename'] = $this->instance->getName();
 			$this->globals['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
+			$this->globals['wgDeletedDirectory'] = "{$this->instanceVaultPathname}/deleted";
 			$this->globals['wgTuleapProjectId'] = $this->instance->getId();
 			$this->globals['wgDBname'] = $this->instance->getDatabaseName();
 			$this->globals['wgDBprefix'] = $this->instance->getDatabasePrefix();
