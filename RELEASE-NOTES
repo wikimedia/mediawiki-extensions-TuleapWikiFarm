@@ -10,6 +10,10 @@ This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
 
 This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
 
+=== Changes since TuleapWikiFarm 1.1.3 ===
+
+* (Tuleap#31148) Add script to migrate old instances
+
 = TuleapWikiFarm 1.1.3 =
 
 This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
