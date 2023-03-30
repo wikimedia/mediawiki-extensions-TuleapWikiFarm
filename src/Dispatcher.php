@@ -2,8 +2,6 @@
 
 namespace TuleapWikiFarm;
 
-use Maintenance;
-
 class Dispatcher {
 
 	/**
