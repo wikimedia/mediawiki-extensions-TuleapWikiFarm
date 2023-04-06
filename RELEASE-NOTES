@@ -1,18 +1,9 @@
-= TuleapWikiFarm 1.1.5 =
-
-This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
-
-=== Changes since TuleapWikiFarm 1.1.4 ===
-
-* (Tuleap#31194) Cannot delete an uploaded file
-
 = TuleapWikiFarm 1.1.4 =
 
 This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
 
 === Changes since TuleapWikiFarm 1.1.3 ===
-
-* (Tuleap#31148) Add script to migrate old instances
+* ...
 
 = TuleapWikiFarm 1.1.3 =
 
@@ -21,6 +12,8 @@ This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
 === Changes since TuleapWikiFarm 1.1.2 ===
 
 * (Tuleap#30730) Fix error on creating a new instance
+* (Tuleap#31148) Add script to migrate old instances
+* (Tuleap#31194) Cannot delete an uploaded file
 
 === Changes since TuleapWikiFarm 1.1.2 ===
 * Localisation updates.
