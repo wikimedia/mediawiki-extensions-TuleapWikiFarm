@@ -15,11 +15,6 @@ class Dispatcher {
 	private $request = [];
 
 	/**
-	 * @var array
-	 */
-	private $globals = [];
-
-	/**
 	 * @var InstanceManager
 	 */
 	private $manager;
@@ -42,17 +37,15 @@ class Dispatcher {
 	/**
 	 * @param array $server $_SERVER
 	 * @param array $request $_REQUEST
-	 * @param array &$globals $GLOBALS
 	 * @param InstanceManager $manager
 	 * @param GlobalStorage $globalStorage
 	 */
 	public function __construct(
-		$server, $request, &$globals,
+		$server, $request,
 		InstanceManager $manager, GlobalStorage $globalStorage
 	) {
 		$this->server = $server;
 		$this->request = $request;
-		$this->globals =& $globals;
 		$this->manager = $manager;
 		$this->globalStorage = $globalStorage;
 	}
@@ -94,7 +87,7 @@ class Dispatcher {
 			// files of the right wiki will be included.
 			//TODO: Inject like $_REQUEST
 			$extractor = new CliArgInstanceNameExtractor();
-			$name = $extractor->extractInstanceName( $this->globals['argv'] );
+			$name = $extractor->extractInstanceName( $GLOBALS['argv'] );
 			if ( empty( $name ) ) {
 				$name = 'w';
 			}
@@ -115,8 +108,8 @@ class Dispatcher {
 			// removed the "--sfr" flag, which would lead to an "Unexpected option" error
 			// Since '--sfr' is already removed from $argv in the extractor, just re-init the runner
 			/** @var MaintenanceRunner */
-			$runner = $this->globals['runner' ];
-			$runner->init( $this->globals['maintClass'] );
+			$runner = $GLOBALS['runner' ];
+			$runner->init( $GLOBALS['maintClass'] );
 		} else {
 			$this->trySetFromOauthCall();
 			$name = isset( $this->request['sfr'] ) ? $this->request['sfr'] : 'w';
@@ -175,26 +168,26 @@ class Dispatcher {
 	 * @param bool $forInstance
 	 */
 	private function setupEnvironment( $forInstance = true ) {
-		$this->globals['wgScriptPath'] = $this->instance->getScriptPath();
-		$this->globals['wgResourceBasePath'] = $this->instance->getScriptPath();
-		$this->globals['wgArticlePath'] = "{$this->instance->getScriptPath()}/$1";
-		$this->globals['wgUploadPath'] = "{$this->instance->getScriptPath()}/img_auth.php";
-		$this->globals['wgReadOnlyFile'] = "{$this->globals['wgUploadDirectory']}/lock_yBgMBwiR";
-		$this->globals['wgFileCacheDirectory'] = "{$this->globals['wgUploadDirectory']}/cache";
-		$this->globals['wgDeletedDirectory'] = "{$this->globals['wgUploadDirectory']}/deleted";
+		$GLOBALS['wgScriptPath'] = $this->instance->getScriptPath();
+		$GLOBALS['wgResourceBasePath'] = $this->instance->getScriptPath();
+		$GLOBALS['wgArticlePath'] = "{$this->instance->getScriptPath()}/$1";
+		$GLOBALS['wgUploadPath'] = "{$this->instance->getScriptPath()}/img_auth.php";
+		$GLOBALS['wgReadOnlyFile'] = "{$GLOBALS['wgUploadDirectory']}/lock_yBgMBwiR";
+		$GLOBALS['wgFileCacheDirectory'] = "{$GLOBALS['wgUploadDirectory']}/cache";
+		$GLOBALS['wgDeletedDirectory'] = "{$GLOBALS['wgUploadDirectory']}/deleted";
 
 		if ( $forInstance ) {
-			$this->globals['wgCacheDirectory'] = "{$this->instanceVaultPathname}/cache";
-			$this->globals['wgSitename'] = $this->instance->getName();
-			$this->globals['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
-			$this->globals['wgDeletedDirectory'] = "{$this->instanceVaultPathname}/deleted";
-			$this->globals['wgTuleapProjectId'] = $this->instance->getId();
-			$this->globals['wgDBname'] = $this->instance->getDatabaseName();
-			$this->globals['wgDBprefix'] = $this->instance->getDatabasePrefix();
-			$this->globals['wgTuleapData'] = $this->instance->getData();
+			$GLOBALS['wgCacheDirectory'] = "{$this->instanceVaultPathname}/cache";
+			$GLOBALS['wgSitename'] = $this->instance->getName();
+			$GLOBALS['wgUploadDirectory'] = "{$this->instanceVaultPathname}/images";
+			$GLOBALS['wgDeletedDirectory'] = "{$this->instanceVaultPathname}/deleted";
+			$GLOBALS['wgTuleapProjectId'] = $this->instance->getId();
+			$GLOBALS['wgDBname'] = $this->instance->getDatabaseName();
+			$GLOBALS['wgDBprefix'] = $this->instance->getDatabasePrefix();
+			$GLOBALS['wgTuleapData'] = $this->instance->getData();
 			$lang = $this->instance->getDataItem( 'lang' );
 			if ( $lang ) {
-				$this->globals['wgLanguageCode'] = $lang;
+				$GLOBALS['wgLanguageCode'] = $lang;
 			}
 			define( 'WIKI_FARMING', true );
 		}
@@ -206,7 +199,7 @@ class Dispatcher {
 		}
 
 		if ( $this->instance->getStatus() === InstanceEntity::STATE_SUSPENDED ) {
-			$this->doInclude( $this->globals['IP'] . '/LocalSettings.SUSPENDED.php' );
+			$this->doInclude( $GLOBALS['IP'] . '/LocalSettings.SUSPENDED.php' );
 			return;
 		}
 		if ( $this->instance->getStatus() === InstanceEntity::STATE_READY ) {
@@ -224,7 +217,7 @@ class Dispatcher {
 	}
 
 	private function includeTuleapFile() {
-		$this->doInclude( $this->globals['IP'] . '/LocalSettings.Tuleap.php' );
+		$this->doInclude( $GLOBALS['IP'] . '/LocalSettings.Tuleap.php' );
 	}
 
 	/**

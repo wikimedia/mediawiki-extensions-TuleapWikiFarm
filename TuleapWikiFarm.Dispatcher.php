@@ -19,7 +19,7 @@ $manager = new InstanceManager(
 );
 $globalStorage = new \TuleapWikiFarm\GlobalStorage( $dbLB );
 
-$dispatcher = new Dispatcher( $_SERVER, $_REQUEST, $GLOBALS, $manager, $globalStorage );
+$dispatcher = new Dispatcher( $_SERVER, $_REQUEST, $manager, $globalStorage );
 
 foreach ( $dispatcher->getFilesToRequire() as $pathname ) {
 	require $pathname;
