@@ -122,6 +122,7 @@ abstract class MaintenanceScript implements IProcessStep {
 			$this->getFormattedArgs(),
 			[ '--sfr', $instance->getName() ]
 		) );
+
 		$this->modifyProcess( $process );
 
 		return $process;
@@ -131,7 +132,7 @@ abstract class MaintenanceScript implements IProcessStep {
 	 * @return Process
 	 */
 	private function runForAll() {
-		return new Process( array_merge(
+		$process = new Process( array_merge(
 			[
 				$this->getPhpExecutable(), $GLOBALS['IP'] .
 				'/extensions/TuleapWikiFarm/maintenance/runForAll.php',
@@ -142,6 +143,8 @@ abstract class MaintenanceScript implements IProcessStep {
 			],
 			$this->shouldSetMaintenanceMode() ? [ '--set-maintenance' ] : []
 		) );
+		$process->setTimeout( null );
+		return $process;
 	}
 
 	/**

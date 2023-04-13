@@ -23,4 +23,11 @@ class Update extends MaintenanceScript {
 	protected function shouldSetMaintenanceMode(): bool {
 		return true;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function modifyProcess( Process $process ) {
+		$process->setTimeout( null );
+	}
 }
