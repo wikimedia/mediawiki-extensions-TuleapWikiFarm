@@ -3,7 +3,8 @@
 This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
 
 === Changes since TuleapWikiFarm 1.1.3 ===
-* ...
+* (Tuleap#31148) Disable default process timeout
+* Do not access $GLOBALS via a reference (PHP 8.1 compat)
 
 = TuleapWikiFarm 1.1.3 =
 
