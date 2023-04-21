@@ -37,7 +37,7 @@ class RunForAll extends Maintenance {
 				explode( ' ', $this->getOption( 'args' ) ),
 				[ '--sfr', $name ]
 			) );
-
+			$process->setTimeout( null );
 			$this->output( "Executing for $name\n" );
 			if ( $this->getOption( 'set-maintenance', false ) ) {
 				$this->setMaintenanceMode( $instance, $manager );

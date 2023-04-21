@@ -113,6 +113,7 @@ class InstallInstance implements IProcessStep {
 
 		// We must run this in isolation, as to not override globals, services...
 		$process = new Process( $processArgs );
+		$process->setTimeout( null );
 
 		$err = '';
 		$process->run( static function ( $type, $buffer ) use ( &$err ) {
