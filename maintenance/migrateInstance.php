@@ -103,6 +103,7 @@ class MigrateInstance extends Maintenance {
 			[ '--quick' ],
 			[ '--sfr', $instance->getName() ]
 		) );
+		$process->setTimeout( null );
 		$process->run();
 		if ( $process->getExitCode() ) {
 			$this->fatalError( "Could not migrate database: " . $process->getErrorOutput() . "\n" );
