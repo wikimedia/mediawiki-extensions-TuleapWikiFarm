@@ -54,7 +54,7 @@ class PreSharedKeySessionProviderTest extends TestCase {
 	/**
 	 * @return array[]
 	 */
-	public function provideSecret() {
+	public static function provideSecret() {
 		return [
 			'proper-secret' => [
 				'e9971341f03fdc2021f72a89d5a12187',

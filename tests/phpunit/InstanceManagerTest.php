@@ -72,7 +72,7 @@ class InstanceManagerTest extends TestCase {
 	/**
 	 * @return array[]
 	 */
-	public function provideInstanceNames() {
+	public static function provideInstanceNames() {
 		return [
 			[ 'Dummy', true ],
 			[ 'Foo/Bar', false ],
