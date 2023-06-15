@@ -2,6 +2,8 @@
 
 namespace TuleapWikiFarm\ProcessStep\Maintenance;
 
+use Symfony\Component\Process\Process;
+
 class Update extends MaintenanceScript {
 	/**
 	 * @inheritDoc
