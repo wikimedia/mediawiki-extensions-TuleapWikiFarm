@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Jon Harald Søby"
+		]
+	},
+	"tuleapwikifarm-desc": "Farmbehandling over Tuleap",
+	"action-tuleap-farm-manage": "behandle wikiinstanser innen Tuleap",
+	"right-tuleap-farm-manage": "Behandle wikiinstanser innen Tuleap"
+}
