@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"tuleapwikifarm-desc": "Wikifarm-beheer via Tuleap",
+	"action-tuleap-farm-manage": "wiki’s binnen Tuleap te beheren",
+	"right-tuleap-farm-manage": "Wiki’s binnen Tuleap beheren"
+}
