@@ -9,6 +9,7 @@ use MediaWiki\Session\SessionInfo;
 use MediaWiki\Session\SessionManager;
 use MediaWiki\Session\UserInfo;
 use MWGrants;
+use User;
 use WebRequest;
 
 class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
@@ -65,7 +66,10 @@ class PreSharedKeySessionProvider extends ImmutableSessionProviderWithCookie {
 		}
 		$token = substr( $header, 7 );
 		if ( $this->tokenValid( $token ) ) {
-			$user = \User::newSystemUser( 'Mediawiki default' );
+			$user = User::newSystemUser( 'Mediawiki default', [ 'steal' => true ] );
+			if ( !( $user instanceof User ) ) {
+				return null;
+			}
 
 			$services = MediaWikiServices::getInstance();
 
