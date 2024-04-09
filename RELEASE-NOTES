@@ -1,3 +1,10 @@
+= TuleapWikiFarm 1.1.6 =
+
+This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
+
+=== Changes since TuleapWikiFarm 1.1.5 ===
+* (Tuleap#31148) Disable default process timeout
+
 = TuleapWikiFarm 1.1.5 =
 
 This is a security and maintenance release of the TuleapWikiFarm 1.1 branch.
