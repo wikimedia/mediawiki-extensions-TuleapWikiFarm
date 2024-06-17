@@ -5,7 +5,6 @@ namespace TuleapWikiFarm\Rest;
 use Config;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Rest\HttpException;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\ProcessStep\CreateInstanceVault;
@@ -94,46 +93,6 @@ class CreateInstanceHandler extends AuthorizedHandler {
 	}
 
 	/**
-	 * @inheritDoc
-	 */
-	public function getBodyValidator( $contentType ) {
-		if ( $contentType === 'application/json' ) {
-			return new JsonBodyValidator( [
-				'lang' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => false,
-					ParamValidator::PARAM_TYPE => 'string',
-					ParamValidator::PARAM_DEFAULT => $this->config->get( 'LanguageCode' ),
-				],
-				'dbserver' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => false,
-					ParamValidator::PARAM_TYPE => 'string',
-					ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBserver' ),
-				],
-				'dbuser' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => false,
-					ParamValidator::PARAM_TYPE => 'string',
-					ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBuser' ),
-				],
-				'dbpass' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => false,
-					ParamValidator::PARAM_TYPE => 'string',
-					ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBpassword' ),
-				],
-				'project_id' => [
-					self::PARAM_SOURCE => 'body',
-					ParamValidator::PARAM_REQUIRED => true,
-					ParamValidator::PARAM_TYPE => 'integer',
-				],
-			] );
-		}
-		throw new HttpException( 'Content-Type header must be application/json' );
-	}
-
-	/**
 	 * @return array[]
 	 */
 	public function getParamSettings() {
@@ -142,6 +101,40 @@ class CreateInstanceHandler extends AuthorizedHandler {
 				self::PARAM_SOURCE => 'path',
 				ParamValidator::PARAM_REQUIRED => true,
 				ParamValidator::PARAM_TYPE => 'string',
+			]
+		];
+	}
+
+	public function getBodyParamSettings(): array {
+		return [
+			'lang' => [
+				self::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_DEFAULT => $this->config->get( 'LanguageCode' ),
+			],
+			'dbserver' => [
+				self::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBserver' ),
+			],
+			'dbuser' => [
+				self::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBuser' ),
+			],
+			'dbpass' => [
+				self::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_REQUIRED => false,
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_DEFAULT => $this->config->get( 'DBpassword' ),
+			],
+			'project_id' => [
+				self::PARAM_SOURCE => 'body',
+				ParamValidator::PARAM_REQUIRED => true,
+				ParamValidator::PARAM_TYPE => 'integer',
 			]
 		];
 	}
