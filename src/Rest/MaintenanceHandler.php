@@ -3,7 +3,6 @@
 namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Rest\HttpException;
-use MediaWiki\Rest\Validator\JsonBodyValidator;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
 use TuleapWikiFarm\StepProcess;
@@ -74,17 +73,6 @@ class MaintenanceHandler extends AuthorizedHandler {
 		] );
 
 		return $this->runProcess( $process, $timeout );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getBodyValidator( $contentType ) {
-		if ( $contentType === 'application/json' ) {
-			return new JsonBodyValidator( [] );
-		}
-
-		throw new HttpException( 'Content-Type header must be application/json' );
 	}
 
 	/**
