@@ -4,6 +4,7 @@ namespace TuleapWikiFarm\Rest;
 
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Rest\HttpException;
+use MediaWiki\Rest\Validator\JsonBodyValidator;
 use TuleapWikiFarm\InstanceEntity;
 use TuleapWikiFarm\InstanceManager;
 use Wikimedia\ParamValidator\ParamValidator;
@@ -67,6 +68,39 @@ class RegisterInstanceHandler extends AuthorizedHandler {
 	}
 
 	/**
+	 * @inheritDoc
+	 */
+	public function getBodyValidator( $contentType ) {
+		if ( $contentType === 'application/json' ) {
+			return new JsonBodyValidator( [
+				'project_id' => [
+					self::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_REQUIRED => true,
+					ParamValidator::PARAM_TYPE => 'integer'
+				],
+				'project_name' => [
+					self::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_REQUIRED => true,
+					ParamValidator::PARAM_TYPE => 'string'
+				],
+				'dbprefix' => [
+					self::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_REQUIRED => false,
+					ParamValidator::PARAM_TYPE => 'string',
+					ParamValidator::PARAM_DEFAULT => ''
+				],
+				'lang' => [
+					self::PARAM_SOURCE => 'body',
+					ParamValidator::PARAM_REQUIRED => false,
+					ParamValidator::PARAM_TYPE => 'string',
+					ParamValidator::PARAM_DEFAULT => '',
+				],
+			] );
+		}
+		throw new HttpException( 'Content-Type header must be application/json' );
+	}
+
+	/**
 	 * @return array[]
 	 */
 	public function getParamSettings() {
@@ -76,36 +110,6 @@ class RegisterInstanceHandler extends AuthorizedHandler {
 				ParamValidator::PARAM_REQUIRED => true,
 				ParamValidator::PARAM_TYPE => 'string',
 			]
-		];
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getBodyParamSettings(): array {
-		return [
-			'project_id' => [
-				self::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_REQUIRED => true,
-				ParamValidator::PARAM_TYPE => 'integer'
-			],
-			'project_name' => [
-				self::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_REQUIRED => true,
-				ParamValidator::PARAM_TYPE => 'string'
-			],
-			'dbprefix' => [
-				self::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_REQUIRED => false,
-				ParamValidator::PARAM_TYPE => 'string',
-				ParamValidator::PARAM_DEFAULT => ''
-			],
-			'lang' => [
-				self::PARAM_SOURCE => 'body',
-				ParamValidator::PARAM_REQUIRED => false,
-				ParamValidator::PARAM_TYPE => 'string',
-				ParamValidator::PARAM_DEFAULT => '',
-			],
 		];
 	}
 }
