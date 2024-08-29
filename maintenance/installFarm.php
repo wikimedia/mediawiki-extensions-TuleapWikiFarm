@@ -78,7 +78,7 @@ class InstallFarm extends Maintenance {
 		$adminName = $this->getArg( 1 );
 
 		try {
-			$installer = new FarmCliInstaller( $siteName, $adminName, $this->mOptions );
+			$installer = new FarmCliInstaller( $siteName, $adminName, $this->getParameters()->getOptions() );
 		} catch ( InstallException $e ) {
 			$this->output( $e->getStatus()->getMessage( false, false, 'en' )->text() . "\n" );
 			return false;
