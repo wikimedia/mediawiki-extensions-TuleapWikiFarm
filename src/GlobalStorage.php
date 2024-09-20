@@ -62,7 +62,8 @@ class GlobalStorage {
 			'tuleap_global_storage_auth',
 			[
 				'tgsa_instance' => $instance
-			]
+			],
+			__METHOD__
 		);
 	}
 }
