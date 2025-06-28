@@ -40,7 +40,9 @@
 		}
 	},
 	"AutoloadNamespaces": {
-		"TuleapWikiFarm\\": "src/",
+		"TuleapWikiFarm\\": "src/"
+	},
+	"TestAutoloadNamespaces": {
 		"TuleapWikiFarm\\Tests\\": "tests/phpunit/"
 	},
 	"ServiceWiringFiles": [
