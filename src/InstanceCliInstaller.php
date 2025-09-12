@@ -102,7 +102,6 @@ class InstanceCliInstaller extends FarmCliInstaller {
 	}
 
 	/**
-	 *
 	 * @param \Status $status
 	 */
 	public function showStatusMessage( \Status $status ) {

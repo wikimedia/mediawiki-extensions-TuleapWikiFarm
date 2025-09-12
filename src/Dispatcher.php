@@ -23,13 +23,11 @@ class Dispatcher {
 	private $globalStorage;
 
 	/**
-	 *
 	 * @var InstanceEntity|null
 	 */
 	private $instance = null;
 
 	/**
-	 *
 	 * @var string
 	 */
 	private $instanceVaultPathname = '';
@@ -51,7 +49,6 @@ class Dispatcher {
 	}
 
 	/**
-	 *
 	 * @var string[]
 	 */
 	private $filesToRequire = [];
