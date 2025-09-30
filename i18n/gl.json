@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Toliño"
+		]
+	},
+	"tuleapwikifarm-desc": "Xestión de granxas en Tuleap",
+	"action-tuleap-farm-manage": "xestionar instancias wiki dentro de Tuleap",
+	"right-tuleap-farm-manage": "Xestionar instancias wiki dentro de Tuleap"
+}
