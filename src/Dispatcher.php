@@ -109,7 +109,7 @@ class Dispatcher {
 			// Since '--sfr' is already removed from $argv in the extractor, just re-init the runner
 			/** @var MaintenanceRunner */
 			$runner = $GLOBALS['runner' ];
-			$runner->init( $GLOBALS['maintClass'] );
+			$runner->initForClass( $GLOBALS['maintClass'], $GLOBALS['argv'] );
 		} else {
 			$this->trySetFromOauthCall();
 			$name = isset( $this->request['sfr'] ) ? $this->request['sfr'] : 'w';
