@@ -2,8 +2,8 @@
 
 namespace TuleapWikiFarm;
 
-use CliInstaller;
-use DatabaseInstaller;
+use MediaWiki\Installer\CliInstaller;
+use MediaWiki\Installer\DatabaseInstaller;
 
 class FarmCliInstaller extends CliInstaller {
 

@@ -3,7 +3,7 @@
 namespace TuleapWikiFarm;
 
 use CommentStoreComment;
-use DatabaseInstaller;
+use MediaWiki\Installer\DatabaseInstaller;
 use Exception;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
