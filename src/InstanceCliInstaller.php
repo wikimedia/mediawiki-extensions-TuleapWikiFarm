@@ -3,8 +3,8 @@
 namespace TuleapWikiFarm;
 
 use CommentStoreComment;
-use MediaWiki\Installer\DatabaseInstaller;
 use Exception;
+use MediaWiki\Installer\DatabaseInstaller;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
 use Status;
