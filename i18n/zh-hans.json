@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Peterxy12",
 			"StarrySky"
 		]
 	},
-	"tuleapwikifarm-desc": "Tuleap 的农场管理"
+	"tuleapwikifarm-desc": "Tuleap 的农场管理",
+	"action-tuleap-farm-manage": "在Tuleap来管理wiki实例",
+	"right-tuleap-farm-manage": "在Tuleap来管理wiki实例"
 }
