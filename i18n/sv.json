@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Sabelöga"
+			"Sabelöga",
+			"Stefan2255"
 		]
 	},
-	"tuleapwikifarm-desc": "Hotellhantering över Tuleap"
+	"tuleapwikifarm-desc": "Hotellhantering över Tuleap",
+	"action-tuleap-farm-manage": "hantera wiki-instanser inom Tuleap",
+	"right-tuleap-farm-manage": "Hantera wiki-instanser i Tuleap"
 }
