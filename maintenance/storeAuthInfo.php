@@ -31,11 +31,11 @@ class StoreAuthInfo extends Maintenance {
 				$this->getOption( 'instanceName' )
 			);
 		} catch ( Exception $ex ) {
-			$this->error( $ex->getMessage(), 1 );
+			$this->fatalError( $ex->getMessage() );
 		}
 
 		if ( !$res ) {
-			$this->error( 'Could not insert record', 1 );
+			$this->fatalError( 'Could not insert record' );
 		}
 	}
 

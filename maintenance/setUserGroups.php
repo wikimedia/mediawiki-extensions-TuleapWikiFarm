@@ -20,7 +20,7 @@ class SetUserGroups extends Maintenance {
 		$data = $this->getOption( 'data' );
 		$status = FormatJson::parse( $data, FormatJson::FORCE_ASSOC );
 		if ( !$status->isOK() ) {
-			$this->error( 'Invalid input data', 1 );
+			$this->fatalError( 'Invalid input data' );
 		}
 		$this->userFactory = \MediaWiki\MediaWikiServices::getInstance()->getUserFactory();
 		$this->groupManager = \MediaWiki\MediaWikiServices::getInstance()->getUserGroupManager();
