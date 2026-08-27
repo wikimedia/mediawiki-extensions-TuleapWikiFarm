@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"tuleapwikifarm-desc": "Správa farmy cez Tuleap",
+	"action-tuleap-farm-manage": "spravovať inštancie wiki v rámci Tuleapu",
+	"right-tuleap-farm-manage": "Spravovať inštancie wiki v rámci Tuleapu"
+}
